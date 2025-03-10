@@ -1302,6 +1302,12 @@ trainer.save_state()
 
 
 ```python
+import os
+os.environ["TOKENIZERS_PARALLELISM"] = "false"  # 👈 必须放在所有import之前
+```
+
+
+```python
 # 加载完整数据集（已下载时自动使用缓存）
 from datasets import load_dataset
 dataset = load_dataset("yelp_review_full")
@@ -1330,14 +1336,14 @@ dataset
 
 
 ```python
-dataset["train"][333]
+dataset["train"][666]
 ```
 
 
 
 
-    {'label': 3,
-     'text': "All in favor of a deep dish pizza say I!.......IIIIIII,  ok now that i have that out of my system. This place is such a great hangout/eat-in spot. I hadn't been here and years and some friends invited us out for the evening. I was so glad they were paying cause  I was low on funds at the time.\\n\\nWe arrived on a friday night and of course it was busy there. We waited about 10 minutes to get a table which wasn't bad considering the crowd. We looked over the menu and they have so many great choices. Pizza, pasta, appetizers, seafood, burgers, salads and sandwiches. \\n\\nAfter ordering two mango lemonades that were wayyyyy over sweetened we ordered our food. We both are going gluten free which is tough but UNO's gave us a nice selection of dishes to choose from. Plus! They make a thin crust gluten free pizza which taste great. My hubby ordered the mediterrean thin crust because he loves kalamata olives and I ordered the Guac-alicious burger with a Caesar side salad. My salad came out pretty quick which was nice but it had a little too much dressing on it. I didn't complain, it still tasted great.\\n\\nI'm not into red meat so I tried to order a black bean burger or get chicken instead of beef, but the ran out of black bean and they couldn't get the chicken so i just ordered it anyway. The burger was piled really high with all the toppings including guacamole and it was very creamy but i couldn't get over the taste of the burger because it just didn't have any flavor. Very saddening. I ended up just eating the veggies and discarding the meat. I snacked on some of my hubbies pizza even though it was only a small amount. \\n\\nWe came here twice in one week. The second time we ordered the 9-grain deep dish with mushrooms, parmesan and a garlic white sauce. Was this pizza amazing or what?? I will probably always eat this pizza whenever I come. \\n\\nOnly down side is slow service. It took 20 minutes for our pizza to come out and my hubbies was a little over cooked. He got the numero uno which was ok but mine had way more flavor!!"}
+    {'label': 2,
+     'text': 'Just ate there, right next to GameStop & Google, has 3 small booths, & ordered the pepper steak w/ onion ($10.95). Food is fast fresh & hot, but mine had too much onion & not enough steak. At the end of the meal I was just eating onions with rice, though I hear this is healthy for you. Counter lady was cordial, but didn\'t reply when customers told her, \\"Have a nice day\\" #awkward. I know that English isn\'t her first language but she needs to catch on that people are wishing her well. Wasn\'t stuffed full either despite having eaten a large plate (I usually get this feeling eating Asian). This is basically a nice place to go for lunch that won\'t ruin your appetite for dinner. (Side note: Food is very clean. Brushed my teeth an hour before w/ Tom\'s of Maine fluoride-free peppermint & still had minty fresh breath an hour after eating)'}
 
 
 
@@ -1350,7 +1356,7 @@ tokenizer = AutoTokenizer.from_pretrained("bert-base-cased")
 
 
 def tokenize_function(examples):
-    return tokenizer(examples["text"], padding="max_length", truncation=True)
+    return tokenizer(examples["text"], truncation=True)
 
 
 tokenized_datasets = dataset.map(tokenize_function, batched=True)
@@ -1366,9 +1372,11 @@ tokenized_datasets = dataset.map(tokenize_function, batched=True)
 
 
 ```python
-import os
-os.environ["TOKENIZERS_PARALLELISM"] = "false"  # 👈 必须放在所有import之前
+print("可用划分:", list(tokenized_datasets.keys()))
 ```
+
+    可用划分: ['train', 'test']
+
 
 
 ```python
@@ -1378,8 +1386,6 @@ from transformers import AutoModelForSequenceClassification
 model = AutoModelForSequenceClassification.from_pretrained("bert-base-cased", num_labels=5)
 ```
 
-    /root/miniconda3/envs/peft/lib/python3.10/site-packages/huggingface_hub/file_download.py:795: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
-      warnings.warn(
     Some weights of BertForSequenceClassification were not initialized from the model checkpoint at bert-base-cased and are newly initialized: ['classifier.bias', 'classifier.weight']
     You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
 
@@ -1418,12 +1424,35 @@ def compute_metrics(eval_pred):
 
 
 ```python
+from tensorboard import version
+print("TensorBoard 版本:", version.VERSION)
+```
+
+    TensorBoard 版本: 2.19.0
+
+
+
+```python
+import socket
+# 创建TCP套接字
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# 尝试连接本地8001端口（非阻塞方式）
+result = sock.connect_ex(('localhost', 8001))
+# 断言验证（0表示端口开放）
+assert result == 0, "TensorBoard 端口 8001 未开启！"
+```
+
+
+```python
 #### 训练过程指标监控
 from transformers import TrainingArguments, Trainer
 
 training_args = TrainingArguments(
     # 输出目录：保存模型和日志的核心路径
     output_dir=model_dir,  
+
+    report_to="tensorboard",          # 启用TensorBoard
+    logging_dir="models/bert-base-cased-finetune-yelp-full/runs",  # 明确日志路径
 
     # 维持工作进程
     dataloader_persistent_workers=True,
@@ -1433,22 +1462,23 @@ training_args = TrainingArguments(
     
     # 批次配置：物理batch_size=8，通过2次梯度累积等效于16
     per_device_train_batch_size=12,     # 适合T4等中等显存GPU
-    gradient_accumulation_steps=2,     # 累计2个batch的梯度再更新参数
+    gradient_accumulation_steps=2,     # 累计2个batch的梯度再更新参数，等效batch_size=24
     
     # 训练轮次：3轮在650k数据下可能略少（推荐5-10轮）
-    num_train_epochs=5,  
+    num_train_epochs=8,  
     
     # 日志记录：每100步打印日志（约每100*8=800样本记录一次）
-    logging_steps=100,  
+    logging_steps=200,  
     
     # 混合精度：开启FP16训练（需GPU支持）
     fp16=True,
-    learning_rate=3e-5,          # 重要！BERT微调黄金学习率
-    weight_decay=0.01,           # 防止过拟合
+    learning_rate=2e-5,          # 重要！BERT微调黄金学习率 # 从3e-5→2e-5，更稳定收敛
+    weight_decay=0.05,           # 防止过拟合 # 从0.01→0.05，增强正则化
     warmup_ratio=0.1,            # 前10%步数用于学习率预热
     save_strategy="epoch",       # 每个epoch保存检查点
     load_best_model_at_end=True, # 训练结束加载最佳模型
     metric_for_best_model="accuracy",
+    lr_scheduler_type="cosine",         # 新增：余弦退火调度
     # CPU并行优化配置（重点调整部分）
     dataloader_num_workers=4        # ← 根据8核设置为4（最佳实践：核心数的50%）
 )
@@ -1517,27 +1547,27 @@ print(training_args)
     jit_mode_eval=False,
     label_names=None,
     label_smoothing_factor=0.0,
-    learning_rate=3e-05,
+    learning_rate=2e-05,
     length_column_name=length,
     load_best_model_at_end=True,
     local_rank=0,
     log_level=passive,
     log_level_replica=warning,
     log_on_each_node=True,
-    logging_dir=models/bert-base-cased-finetune-yelp-full/runs/Mar07_01-44-51_deepseek-r1-t4-test,
+    logging_dir=models/bert-base-cased-finetune-yelp-full/runs,
     logging_first_step=False,
     logging_nan_inf_filter=True,
-    logging_steps=100,
+    logging_steps=200,
     logging_strategy=steps,
     lr_scheduler_kwargs={},
-    lr_scheduler_type=linear,
+    lr_scheduler_type=cosine,
     max_grad_norm=1.0,
     max_steps=-1,
     metric_for_best_model=accuracy,
     mp_parameters=,
     neftune_noise_alpha=None,
     no_cuda=False,
-    num_train_epochs=5,
+    num_train_epochs=8,
     optim=adamw_torch,
     optim_args=None,
     output_dir=models/bert-base-cased-finetune-yelp-full,
@@ -1552,7 +1582,7 @@ print(training_args)
     push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
     ray_scope=last,
     remove_unused_columns=True,
-    report_to=[],
+    report_to=['tensorboard'],
     resume_from_checkpoint=None,
     run_name=models/bert-base-cased-finetune-yelp-full,
     save_on_each_node=False,
@@ -1577,12 +1607,15 @@ print(training_args)
     use_mps_device=False,
     warmup_ratio=0.1,
     warmup_steps=0,
-    weight_decay=0.01,
+    weight_decay=0.05,
     )
 
 
 
 ```python
+from transformers import DataCollatorWithPadding
+data_collator = DataCollatorWithPadding(tokenizer=tokenizer)  # ← 新增这行
+
 ## 开始训练
 ### 实例化训练器（Trainer）
 train_dataset = tokenized_datasets["train"]
@@ -1594,6 +1627,7 @@ trainer = Trainer(
     train_dataset=train_dataset,
     eval_dataset=eval_dataset,
     compute_metrics=compute_metrics,
+    data_collator=data_collator,
 )
 ```
 
@@ -1602,15 +1636,15 @@ trainer = Trainer(
 
 
 ```python
-trainer.train()
+trainer.train(resume_from_checkpoint=True)
 ```
 
 
 
     <div>
 
-      <progress value='64416' max='135415' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      [ 64416/135415 14:41:01 < 16:11:05, 1.22 it/s, Epoch 2.38/5]
+      <progress value='216664' max='216664' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      [216664/216664 32:11:53, Epoch 7/8]
     </div>
     <table border="1" class="dataframe">
   <thead>
@@ -1623,19 +1657,38 @@ trainer.train()
   </thead>
   <tbody>
     <tr>
-      <td>0</td>
-      <td>0.740500</td>
-      <td>0.726306</td>
-      <td>0.682700</td>
+      <td>2</td>
+      <td>0.633500</td>
+      <td>0.731120</td>
+      <td>0.686660</td>
     </tr>
     <tr>
-      <td>2</td>
-      <td>0.704100</td>
-      <td>0.702620</td>
-      <td>0.690260</td>
+      <td>4</td>
+      <td>0.466700</td>
+      <td>0.849862</td>
+      <td>0.679700</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>0.273800</td>
+      <td>1.191260</td>
+      <td>0.671200</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>0.208900</td>
+      <td>1.318907</td>
+      <td>0.669620</td>
     </tr>
   </tbody>
 </table><p>
+
+
+
+
+
+    TrainOutput(global_step=216664, training_loss=0.2978812934675971, metrics={'train_runtime': 115915.1343, 'train_samples_per_second': 44.86, 'train_steps_per_second': 1.869, 'total_flos': 1.2306866400800532e+18, 'train_loss': 0.2978812934675971, 'epoch': 8.0})
+
 
 
 
@@ -1651,6 +1704,26 @@ for key, value in small_results.items():
     else:
         print(f"{key:25} → {value}")
 ```
+
+
+
+<div>
+
+  <progress value='1860' max='13' style='width:300px; height:20px; vertical-align: middle;'></progress>
+  [13/13 02:13]
+</div>
+
+
+
+    
+    📊 评估结果详情：
+    eval_loss                 → 0.8131
+    eval_accuracy             → 0.6700
+    eval_runtime              → 0.9124
+    eval_samples_per_second   → 109.5980
+    eval_steps_per_second     → 14.2480
+    epoch                     → 8.0000
+
 
 
 ```python
@@ -1669,4 +1742,48 @@ for key, value in full_results.items():
 ### 保存模型和训练状态
 trainer.save_model(model_dir)
 trainer.save_state()
+```
+
+## 中断训练并清理显存
+
+
+```python
+# 在中断后立即执行
+trainer.save_model("manual_checkpoint")  # 保存模型权重
+trainer.save_state()  # 保存优化器/调度器状态
+```
+
+
+```python
+# 复制日志文件到安全位置
+cp -r models/bert-base-cased-finetune-yelp-full/runs models/bert-base-cased-finetune-yelp-full/backup/
+
+```
+
+
+      Cell In[16], line 2
+        cp -r models/bert-base-cased-finetune-yelp-full/runs models/bert-base-cased-finetune-yelp-full/backup/
+              ^
+    SyntaxError: invalid syntax
+
+
+
+
+```python
+import torch
+from IPython import display
+
+display.clear_output(wait=True)  # 清理输出
+torch.cuda.empty_cache()  # 清空显存
+```
+
+
+```python
+# 修改参数防止恢复后死锁
+training_args.dataloader_persistent_workers = False
+```
+
+
+```python
+
 ```
