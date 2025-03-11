@@ -164,6 +164,7 @@ cython_debug/
 
 nohup.out
 */models/
+*/manual_checkpoint/
 peft/temp/
 deepspeed/output_dir
 RLHF
