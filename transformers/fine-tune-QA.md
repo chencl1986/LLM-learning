@@ -11,7 +11,7 @@
 
 ```python
 # 根据你使用的模型和GPU资源情况，调整以下关键参数
-squad_v2 = True
+squad_v2 = False
 model_checkpoint = "distilbert-base-uncased"
 batch_size = 16
 ```
@@ -36,6 +36,26 @@ from datasets import load_dataset
 datasets = load_dataset("squad_v2" if squad_v2 else "squad")
 ```
 
+
+    Downloading readme: 0.00B [00:00, ?B/s]
+
+
+
+    Downloading data:   0%|          | 0.00/14.5M [00:00<?, ?B/s]
+
+
+
+    Downloading data:   0%|          | 0.00/1.82M [00:00<?, ?B/s]
+
+
+
+    Generating train split:   0%|          | 0/87599 [00:00<?, ? examples/s]
+
+
+
+    Generating validation split:   0%|          | 0/10570 [00:00<?, ? examples/s]
+
+
 The `datasets` object itself is [`DatasetDict`](https://huggingface.co/docs/datasets/package_reference/main_classes.html#datasetdict), which contains one key for the training, validation and test set.
 
 
@@ -49,11 +69,11 @@ datasets
     DatasetDict({
         train: Dataset({
             features: ['id', 'title', 'context', 'question', 'answers'],
-            num_rows: 130319
+            num_rows: 87599
         })
         validation: Dataset({
             features: ['id', 'title', 'context', 'question', 'answers'],
-            num_rows: 11873
+            num_rows: 10570
         })
     })
 
@@ -103,11 +123,11 @@ datasets["train"][333]
 
 
 
-    {'id': '56d4d0c32ccc5a1400d83250',
+    {'id': '56d443ef2ccc5a1400d830db',
      'title': 'Beyoncé',
-     'context': 'Beyoncé is believed to have first started a relationship with Jay Z after a collaboration on "\'03 Bonnie & Clyde", which appeared on his seventh album The Blueprint 2: The Gift & The Curse (2002). Beyoncé appeared as Jay Z\'s girlfriend in the music video for the song, which would further fuel speculation of their relationship. On April 4, 2008, Beyoncé and Jay Z were married without publicity. As of April 2014, the couple have sold a combined 300 million records together. The couple are known for their private relationship, although they have appeared to become more relaxed in recent years. Beyoncé suffered a miscarriage in 2010 or 2011, describing it as "the saddest thing" she had ever endured. She returned to the studio and wrote music in order to cope with the loss. In April 2011, Beyoncé and Jay Z traveled to Paris in order to shoot the album cover for her 4, and unexpectedly became pregnant in Paris.',
-     'question': 'How many records combined have Beyoncé and Jay Z sold?',
-     'answers': {'text': ['300 million'], 'answer_start': [447]}}
+     'context': 'Beyoncé attended St. Mary\'s Elementary School in Fredericksburg, Texas, where she enrolled in dance classes. Her singing talent was discovered when dance instructor Darlette Johnson began humming a song and she finished it, able to hit the high-pitched notes. Beyoncé\'s interest in music and performing continued after winning a school talent show at age seven, singing John Lennon\'s "Imagine" to beat 15/16-year-olds. In fall of 1990, Beyoncé enrolled in Parker Elementary School, a music magnet school in Houston, where she would perform with the school\'s choir. She also attended the High School for the Performing and Visual Arts and later Alief Elsik High School. Beyoncé was also a member of the choir at St. John\'s United Methodist Church as a soloist for two years.',
+     'question': "What city was Beyoncé's elementary school located in?",
+     'answers': {'text': ['Fredericksburg'], 'answer_start': [49]}}
 
 
 
@@ -160,83 +180,83 @@ show_random_elements(datasets["train"])
   <tbody>
     <tr>
       <th>0</th>
-      <td>57267a20708984140094c764</td>
-      <td>Department_store</td>
-      <td>All major cities have their distinctive local department stores, which anchored the downtown shopping district until the arrival of the malls in the 1960s. Washington, for example, after 1887 had Woodward &amp; Lothrop and Garfinckel's starting in 1905. Garfield's went bankrupt in 1990, as did Woodward &amp; Lothrop in 1994. Baltimore had four major department stores: Hutzler's was the prestige leader, followed by Hecht's, Hochschild's and Stewart's. They all operated branches in the suburbs, but all closed in the late twentieth century. By 2015, most locally owned department stores around the country had been consolidated into larger chains, or had closed down entirely.</td>
-      <td>In what year did Garfield's go bankrupt?</td>
-      <td>{'text': ['1990'], 'answer_start': [278]}</td>
+      <td>5731ab21b9d445190005e44f</td>
+      <td>Religion_in_ancient_Rome</td>
+      <td>The meaning and origin of many archaic festivals baffled even Rome's intellectual elite, but the more obscure they were, the greater the opportunity for reinvention and reinterpretation — a fact lost neither on Augustus in his program of religious reform, which often cloaked autocratic innovation, nor on his only rival as mythmaker of the era, Ovid. In his Fasti, a long-form poem covering Roman holidays from January to June, Ovid presents a unique look at Roman antiquarian lore, popular customs, and religious practice that is by turns imaginative, entertaining, high-minded, and scurrilous; not a priestly account, despite the speaker's pose as a vates or inspired poet-prophet, but a work of description, imagination and poetic etymology that reflects the broad humor and burlesque spirit of such venerable festivals as the Saturnalia, Consualia, and feast of Anna Perenna on the Ides of March, where Ovid treats the assassination of the newly deified Julius Caesar as utterly incidental to the festivities among the Roman people. But official calendars preserved from different times and places also show a flexibility in omitting or expanding events, indicating that there was no single static and authoritative calendar of required observances. In the later Empire under Christian rule, the new Christian festivals were incorporated into the existing framework of the Roman calendar, alongside at least some of the traditional festivals.</td>
+      <td>What poet wrote a long poem describing Roman religious holidays?</td>
+      <td>{'text': ['Ovid'], 'answer_start': [346]}</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>5ad122d9645df0001a2d0eca</td>
-      <td>Labour_Party_(UK)</td>
-      <td>Support for the LRC was boosted by the 1901 Taff Vale Case, a dispute between strikers and a railway company that ended with the union being ordered to pay £23,000 damages for a strike. The judgement effectively made strikes illegal since employers could recoup the cost of lost business from the unions. The apparent acquiescence of the Conservative Government of Arthur Balfour to industrial and business interests (traditionally the allies of the Liberal Party in opposition to the Conservative's landed interests) intensified support for the LRC against a government that appeared to have little concern for the industrial proletariat and its problems.</td>
-      <td>What hurt support for the LRC?</td>
-      <td>{'text': [], 'answer_start': []}</td>
+      <td>56e08b457aa994140058e5e3</td>
+      <td>Hydrogen</td>
+      <td>Hydrogen forms a vast array of compounds with carbon called the hydrocarbons, and an even vaster array with heteroatoms that, because of their general association with living things, are called organic compounds. The study of their properties is known as organic chemistry and their study in the context of living organisms is known as biochemistry. By some definitions, "organic" compounds are only required to contain carbon. However, most of them also contain hydrogen, and because it is the carbon-hydrogen bond which gives this class of compounds most of its particular chemical characteristics, carbon-hydrogen bonds are required in some definitions of the word "organic" in chemistry. Millions of hydrocarbons are known, and they are usually formed by complicated synthetic pathways, which seldom involve elementary hydrogen.</td>
+      <td>What is the form of hydrogen and carbon called?</td>
+      <td>{'text': ['hydrocarbons'], 'answer_start': [64]}</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>5ace3e6532bba1001ae4a021</td>
-      <td>Avicenna</td>
-      <td>According to his autobiography, Avicenna had memorised the entire Quran by the age of 10. He learned Indian arithmetic from an Indian greengrocer,ءMahmoud Massahi and he began to learn more from a wandering scholar who gained a livelihood by curing the sick and teaching the young. He also studied Fiqh (Islamic jurisprudence) under the Sunni Hanafi scholar Ismail al-Zahid. Avicenna was taught some extent of philosophy books such as Introduction (Isagoge)'s Porphyry (philosopher), Euclid's Elements, Ptolemy's Almagest by an unpopular philosopher, Abu Abdullah Nateli, who claimed philosophizing.</td>
-      <td>When did Avicenna start studying the Quran?</td>
-      <td>{'text': [], 'answer_start': []}</td>
+      <td>56cef65baab44d1400b88d36</td>
+      <td>Spectre_(2015_film)</td>
+      <td>Christopher Orr, writing in The Atlantic, also criticised the film, saying that Spectre "backslides on virtually every [aspect]". Lawrence Toppman of The Charlotte Observer called Craig's performance "Bored, James Bored." Alyssa Rosenberg, writing for The Washington Post, stated that the film turned into "a disappointingly conventional Bond film."</td>
+      <td>What adjective did Lawrence Toppman use to describe Craig's portrayal of James Bond?</td>
+      <td>{'text': ['Bored'], 'answer_start': [201]}</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>5725ce2e271a42140099d20d</td>
-      <td>Hellenistic_period</td>
-      <td>The Odrysian Kingdom was a union of Thracian tribes under the kings of the powerful Odrysian tribe centered around the region of Thrace. Various parts of Thrace were under Macedonian rule under Philip II of Macedon, Alexander the Great, Lysimachus, Ptolemy II, and Philip V but were also often ruled by their own kings. The Thracians and Agrianes were widely used by Alexander as peltasts and light cavalry, forming about one fifth of his army. The Diadochi also used Thracian mercenaries in their armies and they were also used as colonists. The Odrysians used Greek as the language of administration and of the nobility. The nobility also adopted Greek fashions in dress, ornament and military equipment, spreading it to the other tribes. Thracian kings were among the first to be Hellenized.</td>
-      <td>Which kings wre among the first to be Hellenized?</td>
-      <td>{'text': ['Thracian'], 'answer_start': [741]}</td>
+      <td>571a30bb10f8ca1400304f53</td>
+      <td>Seattle</td>
+      <td>King County Metro provides frequent stop bus service within the city and surrounding county, as well as a South Lake Union Streetcar line between the South Lake Union neighborhood and Westlake Center in downtown. Seattle is one of the few cities in North America whose bus fleet includes electric trolleybuses. Sound Transit currently provides an express bus service within the metropolitan area; two Sounder commuter rail lines between the suburbs and downtown; its Central Link light rail line, which opened in 2009, between downtown and Sea-Tac Airport gives the city its first rapid transit line that has intermediate stops within the city limits. Washington State Ferries, which manages the largest network of ferries in the United States and third largest in the world, connects Seattle to Bainbridge and Vashon Islands in Puget Sound and to Bremerton and Southworth on the Kitsap Peninsula.</td>
+      <td>To what two islands does the ferry service connect?</td>
+      <td>{'text': ['Bainbridge and Vashon'], 'answer_start': [796]}</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>56d97744dc89441400fdb4cb</td>
-      <td>2008_Summer_Olympics_torch_relay</td>
-      <td>A Macau resident was arrested on April 26 for posting a message on cyberctm.com encouraging people to disrupt the relay. Both orchidbbs.com and cyberctm.com Internet forums were shut down from May 2 to 4. This fueled speculation that the shutdowns were targeting speeches against the relay. The head of the Bureau of Telecommunications Regulation has denied that the shutdowns of the websites were politically motivated. About 2,200 police were deployed on the streets, there were no interruptions.</td>
-      <td>In addition to cyberctm.com, what other website was shut down for two days?</td>
-      <td>{'text': ['orchidbbs.com'], 'answer_start': [126]}</td>
+      <td>570d2cb4fed7b91900d45cb5</td>
+      <td>Macintosh</td>
+      <td>In 1998, after the return of Steve Jobs, Apple consolidated its multiple consumer-level desktop models into the all-in-one iMac G3, which became a commercial success and revitalized the brand. Since their transition to Intel processors in 2006, the complete lineup is entirely based on said processors and associated systems. Its current lineup comprises three desktops (the all-in-one iMac, entry-level Mac mini, and the Mac Pro tower graphics workstation), and four laptops (the MacBook, MacBook Air, MacBook Pro, and MacBook Pro with Retina display). Its Xserve server was discontinued in 2011 in favor of the Mac Mini and Mac Pro.</td>
+      <td>What took the place of Mac's Xserve server?</td>
+      <td>{'text': ['Mac Mini and Mac Pro'], 'answer_start': [613]}</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>5a68bac68476ee001a58a7cc</td>
-      <td>Genocide</td>
-      <td>In 2007 the European Court of Human Rights (ECHR), noted in its judgement on Jorgic v. Germany case that in 1992 the majority of legal scholars took the narrow view that "intent to destroy" in the CPPCG meant the intended physical-biological destruction of the protected group and that this was still the majority opinion. But the ECHR also noted that a minority took a broader view and did not consider biological-physical destruction was necessary as the intent to destroy a national, racial, religious or ethnic group was enough to qualify as genocide.</td>
-      <td>What former case did the European Court of Human Rights draw on in 2002 to further refine qualifiers of genocide?</td>
-      <td>{'text': [], 'answer_start': []}</td>
+      <td>570af6876b8089140040f646</td>
+      <td>Videoconferencing</td>
+      <td>Technological developments by videoconferencing developers in the 2010s have extended the capabilities of video conferencing systems beyond the boardroom for use with hand-held mobile devices that combine the use of video, audio and on-screen drawing capabilities broadcasting in real-time over secure networks, independent of location. Mobile collaboration systems now allow multiple people in previously unreachable locations, such as workers on an off-shore oil rig, the ability to view and discuss issues with colleagues thousands of miles away. Traditional videoconferencing system manufacturers have begun providing mobile applications as well, such as those that allow for live and still image streaming.</td>
+      <td>What is one example of an application that videoconferencing manufacturers have begun to offer?</td>
+      <td>{'text': ['still image streaming'], 'answer_start': [689]}</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>5a6fd6388abb0b001a675f9b</td>
-      <td>Alsace</td>
-      <td>This situation prevailed until 1639, when most of Alsace was conquered by France so as to keep it out of the hands of the Spanish Habsburgs, who wanted a clear road to their valuable and rebellious possessions in the Spanish Netherlands. Beset by enemies and seeking to gain a free hand in Hungary, the Habsburgs sold their Sundgau territory (mostly in Upper Alsace) to France in 1646, which had occupied it, for the sum of 1.2 million Thalers. When hostilities were concluded in 1648 with the Treaty of Westphalia, most of Alsace was recognized as part of France, although some towns remained independent. The treaty stipulations regarding Alsace were complex; although the French king gained sovereignty, existing rights and customs of the inhabitants were largely preserved. France continued to maintain its customs border along the Vosges mountains where it had been, leaving Alsace more economically oriented to neighbouring German-speaking lands. The German language remained in use in local administration, in schools, and at the (Lutheran) University of Strasbourg, which continued to draw students from other German-speaking lands. The 1685 Edict of Fontainebleau, by which the French king ordered the suppression of French Protestantism, was not applied in Alsace. France did endeavour to promote Catholicism; Strasbourg Cathedral, for example, which had been Lutheran from 1524 to 1681, was returned to the Catholic Church. However, compared to the rest of France, Alsace enjoyed a climate of religious tolerance.</td>
-      <td>When was Strasbourg Cathedral built?</td>
-      <td>{'text': [], 'answer_start': []}</td>
+      <td>56e82d0100c9c71400d775eb</td>
+      <td>Dialect</td>
+      <td>Italy is home to a vast array of native regional minority languages, most of which are Romance-based and have their own local variants. These regional languages are often referred to colloquially or in non-linguistic circles as Italian "dialects," or dialetti (standard Italian for "dialects"). However, the majority of the regional languages in Italy are in fact not actually "dialects" of standard Italian in the strict linguistic sense, as they are not derived from modern standard Italian but instead evolved locally from Vulgar Latin independent of standard Italian, with little to no influence from what is now known as "standard Italian." They are therefore better classified as individual languages rather than "dialects."</td>
+      <td>What are Italian dialects termed in the Italian language?</td>
+      <td>{'text': ['dialetti'], 'answer_start': [251]}</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>56dfbd5e231d4119001abd5b</td>
-      <td>Internet_service_provider</td>
-      <td>ISPs provide Internet access, employing a range of technologies to connect users to their network. Available technologies have ranged from computer modems with acoustic couplers to telephone lines, to television cable (CATV), wireless Ethernet (wi-fi), and fiber optics.</td>
-      <td>what was an earlier technology used to connect to the internet?</td>
-      <td>{'text': ['telephone lines'], 'answer_start': [182]}</td>
+      <td>56e147e6cd28a01900c6772b</td>
+      <td>Universal_Studios</td>
+      <td>The Universal Film Manufacturing Company was incorporated in New York on April 30, 1912. Laemmle, who emerged as president in July 1912, was the primary figure in the partnership with Dintenfass, Baumann, Kessel, Powers, Swanson, Horsley, and Brulatour. Eventually all would be bought out by Laemmle. The new Universal studio was a vertically integrated company, with movie production, distribution and exhibition venues all linked in the same corporate entity, the central element of the Studio system era.</td>
+      <td>Along with exhibition and distribution, what business did the Universal Film Manufacturing Company engage in?</td>
+      <td>{'text': ['movie production'], 'answer_start': [368]}</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>56d2726659d6e41400145ffa</td>
-      <td>Buddhism</td>
-      <td>During the period of Late Mahayana Buddhism, four major types of thought developed: Madhyamaka, Yogacara, Tathagatagarbha, and Buddhist Logic as the last and most recent. In India, the two main philosophical schools of the Mahayana were the Madhyamaka and the later Yogacara. According to Dan Lusthaus, Madhyamaka and Yogacara have a great deal in common, and the commonality stems from early Buddhism. There were no great Indian teachers associated with tathagatagarbha thought.</td>
-      <td>In India the two main philosophical schools of the Mahayana were Madhyamaka and what else?</td>
-      <td>{'text': ['Yogacara'], 'answer_start': [96]}</td>
+      <td>5731933a05b4da19006bd2d0</td>
+      <td>Steven_Spielberg</td>
+      <td>Spielberg's next film, Schindler's List, was based on the true story of Oskar Schindler, a man who risked his life to save 1,100 Jews from the Holocaust. Schindler's List earned Spielberg his first Academy Award for Best Director (it also won Best Picture). With the film a huge success at the box office, Spielberg used the profits to set up the Shoah Foundation, a non-profit organization that archives filmed testimony of Holocaust survivors. In 1997, the American Film Institute listed it among the 10 Greatest American Films ever Made (#9) which moved up to (#8) when the list was remade in 2007.</td>
+      <td>Whose life was 'Schindler's List' based on?</td>
+      <td>{'text': ['Oskar Schindler'], 'answer_start': [72]}</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>56f8f65b9b226e1400dd1202</td>
-      <td>Near_East</td>
-      <td>The use of the term Middle East as a region of international affairs apparently began in British and American diplomatic circles quite independently of each other over concern for the security of the same country: Iran, then known to the west as Persia. In 1900 Thomas Edward Gordon published an article, The Problem of the Middle East, which began:</td>
-      <td>Where did the use of the term Middle East as a region of international affairs begin?</td>
-      <td>{'text': ['in British and American diplomatic circles'], 'answer_start': [86]}</td>
+      <td>56de93f94396321400ee2a36</td>
+      <td>Arnold_Schwarzenegger</td>
+      <td>In 1985, Schwarzenegger appeared in "Stop the Madness", an anti-drug music video sponsored by the Reagan administration. He first came to wide public notice as a Republican during the 1988 presidential election, accompanying then-Vice President George H.W. Bush at a campaign rally.</td>
+      <td>In what presidential election year did Schwarzenegger make a name for himself as a prominent Republican?</td>
+      <td>{'text': ['1988'], 'answer_start': [184]}</td>
     </tr>
   </tbody>
 </table>
@@ -300,6 +320,10 @@ from transformers import AutoTokenizer
     
 tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
 ```
+
+    /root/miniconda3/envs/peft/lib/python3.10/site-packages/huggingface_hub/file_download.py:795: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+      warnings.warn(
+
 
 **AutoTokenizer 就像「万能适配器」**  
 ——你只需要告诉它用哪个AI模型（比如BERT、GPT-3），它就会自动匹配对应的文字翻译规则。
@@ -597,7 +621,7 @@ len(tokenizer(example["question"], example["context"])["input_ids"])
 
 
 
-    437
+    396
 
 
 
@@ -646,7 +670,7 @@ tokenized_example = tokenizer(
 
 
 
-    [384, 192]
+    [384, 157]
 
 
 
@@ -658,8 +682,8 @@ for x in tokenized_example["input_ids"][:2]:
     print(tokenizer.decode(x))
 ```
 
-    [CLS] beyonce got married in 2008 to whom? [SEP] on april 4, 2008, beyonce married jay z. she publicly revealed their marriage in a video montage at the listening party for her third studio album, i am... sasha fierce, in manhattan's sony club on october 22, 2008. i am... sasha fierce was released on november 18, 2008 in the united states. the album formally introduces beyonce's alter ego sasha fierce, conceived during the making of her 2003 single " crazy in love ", selling 482, 000 copies in its first week, debuting atop the billboard 200, and giving beyonce her third consecutive number - one album in the us. the album featured the number - one song " single ladies ( put a ring on it ) " and the top - five songs " if i were a boy " and " halo ". achieving the accomplishment of becoming her longest - running hot 100 single in her career, " halo "'s success in the us helped beyonce attain more top - ten singles on the list than any other woman during the 2000s. it also included the successful " sweet dreams ", and singles " diva ", " ego ", " broken - hearted girl " and " video phone ". the music video for " single ladies " has been parodied and imitated around the world, spawning the " first major dance craze " of the internet age according to the toronto star. the video has won several awards, including best video at the 2009 mtv europe music awards, the 2009 scottish mobo awards, and the 2009 bet awards. at the 2009 mtv video music awards, the video was nominated for nine awards, ultimately winning three including video of the year. its failure to win the best female video category, which went to american country pop singer taylor swift's " you belong with me ", led to kanye west interrupting the ceremony and beyonce [SEP]
-    [CLS] beyonce got married in 2008 to whom? [SEP] single ladies " has been parodied and imitated around the world, spawning the " first major dance craze " of the internet age according to the toronto star. the video has won several awards, including best video at the 2009 mtv europe music awards, the 2009 scottish mobo awards, and the 2009 bet awards. at the 2009 mtv video music awards, the video was nominated for nine awards, ultimately winning three including video of the year. its failure to win the best female video category, which went to american country pop singer taylor swift's " you belong with me ", led to kanye west interrupting the ceremony and beyonce improvising a re - presentation of swift's award during her own acceptance speech. in march 2009, beyonce embarked on the i am... world tour, her second headlining worldwide concert tour, consisting of 108 shows, grossing $ 119. 5 million. [SEP]
+    [CLS] how many wins does the notre dame men's basketball team have? [SEP] the men's basketball team has over 1, 600 wins, one of only 12 schools who have reached that mark, and have appeared in 28 ncaa tournaments. former player austin carr holds the record for most points scored in a single game of the tournament with 61. although the team has never won the ncaa tournament, they were named by the helms athletic foundation as national champions twice. the team has orchestrated a number of upsets of number one ranked teams, the most notable of which was ending ucla's record 88 - game winning streak in 1974. the team has beaten an additional eight number - one teams, and those nine wins rank second, to ucla's 10, all - time in wins against the top team. the team plays in newly renovated purcell pavilion ( within the edmund p. joyce center ), which reopened for the beginning of the 2009 – 2010 season. the team is coached by mike brey, who, as of the 2014 – 15 season, his fifteenth at notre dame, has achieved a 332 - 165 record. in 2009 they were invited to the nit, where they advanced to the semifinals but were beaten by penn state who went on and beat baylor in the championship. the 2010 – 11 team concluded its regular season ranked number seven in the country, with a record of 25 – 5, brey's fifth straight 20 - win season, and a second - place finish in the big east. during the 2014 - 15 season, the team went 32 - 6 and won the acc conference tournament, later advancing to the elite 8, where the fighting irish lost on a missed buzzer - beater against then undefeated kentucky. led by nba draft picks jerian grant and pat connaughton, the fighting irish beat the eventual national champion duke blue devils twice during the season. the 32 wins were [SEP]
+    [CLS] how many wins does the notre dame men's basketball team have? [SEP] championship. the 2010 – 11 team concluded its regular season ranked number seven in the country, with a record of 25 – 5, brey's fifth straight 20 - win season, and a second - place finish in the big east. during the 2014 - 15 season, the team went 32 - 6 and won the acc conference tournament, later advancing to the elite 8, where the fighting irish lost on a missed buzzer - beater against then undefeated kentucky. led by nba draft picks jerian grant and pat connaughton, the fighting irish beat the eventual national champion duke blue devils twice during the season. the 32 wins were the most by the fighting irish team since 1908 - 09. [SEP]
 
 
 #### 使用 offsets_mapping 获取原始的 input_ids
@@ -683,7 +707,7 @@ tokenized_example = tokenizer(
 print(tokenized_example["offset_mapping"][0][:100])
 ```
 
-    [(0, 0), (0, 7), (8, 11), (12, 19), (20, 22), (23, 27), (28, 30), (31, 35), (35, 36), (0, 0), (0, 2), (3, 8), (9, 10), (10, 11), (12, 16), (16, 17), (18, 25), (26, 33), (34, 37), (38, 39), (39, 40), (41, 44), (45, 53), (54, 62), (63, 68), (69, 77), (78, 80), (81, 82), (83, 88), (89, 93), (93, 96), (97, 99), (100, 103), (104, 113), (114, 119), (120, 123), (124, 127), (128, 133), (134, 140), (141, 146), (146, 147), (148, 149), (150, 152), (152, 153), (153, 154), (154, 155), (156, 161), (162, 168), (168, 169), (170, 172), (173, 182), (182, 183), (183, 184), (185, 189), (190, 194), (195, 197), (198, 205), (206, 208), (208, 209), (210, 214), (214, 215), (216, 217), (218, 220), (220, 221), (221, 222), (222, 223), (224, 229), (230, 236), (237, 240), (241, 249), (250, 252), (253, 261), (262, 264), (264, 265), (266, 270), (271, 273), (274, 277), (278, 284), (285, 291), (291, 292), (293, 296), (297, 302), (303, 311), (312, 322), (323, 330), (330, 331), (331, 332), (333, 338), (339, 342), (343, 348), (349, 355), (355, 356), (357, 366), (367, 373), (374, 377), (378, 384), (385, 387), (388, 391), (392, 396), (397, 403)]
+    [(0, 0), (0, 3), (4, 8), (9, 13), (14, 18), (19, 22), (23, 28), (29, 33), (34, 37), (37, 38), (38, 39), (40, 50), (51, 55), (56, 60), (60, 61), (0, 0), (0, 3), (4, 7), (7, 8), (8, 9), (10, 20), (21, 25), (26, 29), (30, 34), (35, 36), (36, 37), (37, 40), (41, 45), (45, 46), (47, 50), (51, 53), (54, 58), (59, 61), (62, 69), (70, 73), (74, 78), (79, 86), (87, 91), (92, 96), (96, 97), (98, 101), (102, 106), (107, 115), (116, 118), (119, 121), (122, 126), (127, 138), (138, 139), (140, 146), (147, 153), (154, 160), (161, 165), (166, 171), (172, 175), (176, 182), (183, 186), (187, 191), (192, 198), (199, 205), (206, 208), (209, 210), (211, 217), (218, 222), (223, 225), (226, 229), (230, 240), (241, 245), (246, 248), (248, 249), (250, 258), (259, 262), (263, 267), (268, 271), (272, 277), (278, 281), (282, 285), (286, 290), (291, 301), (301, 302), (303, 307), (308, 312), (313, 318), (319, 321), (322, 325), (326, 330), (330, 331), (332, 340), (341, 351), (352, 354), (355, 363), (364, 373), (374, 379), (379, 380), (381, 384), (385, 389), (390, 393), (394, 406), (407, 408), (409, 415), (416, 418)]
 
 
 ---
@@ -757,9 +781,9 @@ print(offsets)
 print(tokenizer.convert_ids_to_tokens([first_token_id])[0], example["question"][offsets[0]:offsets[1]])
 ```
 
-    20773
-    (0, 7)
-    beyonce Beyonce
+    2129
+    (0, 3)
+    how How
 
 
 
@@ -769,7 +793,7 @@ offsets = tokenized_example["offset_mapping"][0][2]
 print(tokenizer.convert_ids_to_tokens([second_token_id])[0], example["question"][offsets[0]:offsets[1]])
 ```
 
-    got got
+    many many
 
 
 
@@ -781,9 +805,9 @@ print(offsets)
 print(tokenizer.convert_ids_to_tokens([first_token_id])[0], example["question"][offsets[0]:offsets[1]])
 ```
 
-    3183
-    (31, 35)
-    whom whom
+    8214
+    (29, 33)
+    dame Dame
 
 
 
@@ -795,9 +819,9 @@ print(offsets)
 print(tokenizer.convert_ids_to_tokens([first_token_id])[0], example["context"][offsets[0]:offsets[1]])
 ```
 
-    2006
-    (0, 2)
-    on On
+    1055
+    (38, 39)
+    s 0
 
 
 
@@ -836,1158 +860,1088 @@ for chunk_idx in range(len(tokenized_example["input_ids"])):
     === 分块 0 ===
     0 0
     Token 0: [CLS] → 
-    0 7
-    Token 1: beyonce → Beyonce
-    8 11
-    Token 2: got → got
-    12 19
-    Token 3: married → married
-    20 22
-    Token 4: in → in
-    23 27
-    Token 5: 2008 → 2008
-    28 30
-    Token 6: to → to
-    31 35
-    Token 7: whom → whom
-    35 36
-    Token 8: ? → ?
-    0 0
-    Token 9: [SEP] → 
-    0 2
-    Token 10: on → On
-    3 8
-    Token 11: april → April
-    9 10
-    Token 12: 4 → 4
-    10 11
-    Token 13: , → ,
-    12 16
-    Token 14: 2008 → 2008
-    16 17
-    Token 15: , → ,
-    18 25
-    Token 16: beyonce → Beyoncé
-    26 33
-    Token 17: married → married
+    0 3
+    Token 1: how → How
+    4 8
+    Token 2: many → many
+    9 13
+    Token 3: wins → wins
+    14 18
+    Token 4: does → does
+    19 22
+    Token 5: the → the
+    23 28
+    Token 6: notre → Notre
+    29 33
+    Token 7: dame → Dame
     34 37
-    Token 18: jay → Jay
+    Token 8: men → men
+    37 38
+    Token 9: ' → '
     38 39
-    Token 19: z → Z
-    39 40
-    Token 20: . → .
-    41 44
-    Token 21: she → She
-    45 53
-    Token 22: publicly → publicly
-    54 62
-    Token 23: revealed → revealed
-    63 68
-    Token 24: their → their
-    69 77
-    Token 25: marriage → marriage
-    78 80
-    Token 26: in → in
-    81 82
-    Token 27: a → a
-    83 88
-    Token 28: video → video
-    89 93
-    Token 29: mont → mont
-    93 96
-    Token 30: ##age → age
-    97 99
-    Token 31: at → at
-    100 103
-    Token 32: the → the
-    104 113
-    Token 33: listening → listening
-    114 119
-    Token 34: party → party
-    120 123
-    Token 35: for → for
-    124 127
-    Token 36: her → her
-    128 133
-    Token 37: third → third
-    134 140
-    Token 38: studio → studio
-    141 146
-    Token 39: album → album
-    146 147
-    Token 40: , → ,
-    148 149
-    Token 41: i → I
-    150 152
-    Token 42: am → Am
-    152 153
-    Token 43: . → .
-    153 154
-    Token 44: . → .
-    154 155
-    Token 45: . → .
-    156 161
-    Token 46: sasha → Sasha
-    162 168
-    Token 47: fierce → Fierce
-    168 169
-    Token 48: , → ,
-    170 172
-    Token 49: in → in
-    173 182
-    Token 50: manhattan → Manhattan
-    182 183
-    Token 51: ' → '
-    183 184
-    Token 52: s → s
-    185 189
-    Token 53: sony → Sony
-    190 194
-    Token 54: club → Club
-    195 197
-    Token 55: on → on
-    198 205
-    Token 56: october → October
+    Token 10: s → s
+    40 50
+    Token 11: basketball → basketball
+    51 55
+    Token 12: team → team
+    56 60
+    Token 13: have → have
+    60 61
+    Token 14: ? → ?
+    0 0
+    Token 15: [SEP] → 
+    0 3
+    Token 16: the → The
+    4 7
+    Token 17: men → men
+    7 8
+    Token 18: ' → '
+    8 9
+    Token 19: s → s
+    10 20
+    Token 20: basketball → basketball
+    21 25
+    Token 21: team → team
+    26 29
+    Token 22: has → has
+    30 34
+    Token 23: over → over
+    35 36
+    Token 24: 1 → 1
+    36 37
+    Token 25: , → ,
+    37 40
+    Token 26: 600 → 600
+    41 45
+    Token 27: wins → wins
+    45 46
+    Token 28: , → ,
+    47 50
+    Token 29: one → one
+    51 53
+    Token 30: of → of
+    54 58
+    Token 31: only → only
+    59 61
+    Token 32: 12 → 12
+    62 69
+    Token 33: schools → schools
+    70 73
+    Token 34: who → who
+    74 78
+    Token 35: have → have
+    79 86
+    Token 36: reached → reached
+    87 91
+    Token 37: that → that
+    92 96
+    Token 38: mark → mark
+    96 97
+    Token 39: , → ,
+    98 101
+    Token 40: and → and
+    102 106
+    Token 41: have → have
+    107 115
+    Token 42: appeared → appeared
+    116 118
+    Token 43: in → in
+    119 121
+    Token 44: 28 → 28
+    122 126
+    Token 45: ncaa → NCAA
+    127 138
+    Token 46: tournaments → tournaments
+    138 139
+    Token 47: . → .
+    140 146
+    Token 48: former → Former
+    147 153
+    Token 49: player → player
+    154 160
+    Token 50: austin → Austin
+    161 165
+    Token 51: carr → Carr
+    166 171
+    Token 52: holds → holds
+    172 175
+    Token 53: the → the
+    176 182
+    Token 54: record → record
+    183 186
+    Token 55: for → for
+    187 191
+    Token 56: most → most
+    192 198
+    Token 57: points → points
+    199 205
+    Token 58: scored → scored
     206 208
-    Token 57: 22 → 22
-    208 209
-    Token 58: , → ,
-    210 214
-    Token 59: 2008 → 2008
-    214 215
-    Token 60: . → .
-    216 217
-    Token 61: i → I
-    218 220
-    Token 62: am → Am
-    220 221
-    Token 63: . → .
-    221 222
-    Token 64: . → .
-    222 223
-    Token 65: . → .
-    224 229
-    Token 66: sasha → Sasha
-    230 236
-    Token 67: fierce → Fierce
-    237 240
-    Token 68: was → was
-    241 249
-    Token 69: released → released
-    250 252
-    Token 70: on → on
-    253 261
-    Token 71: november → November
-    262 264
-    Token 72: 18 → 18
-    264 265
-    Token 73: , → ,
-    266 270
-    Token 74: 2008 → 2008
-    271 273
-    Token 75: in → in
-    274 277
-    Token 76: the → the
-    278 284
-    Token 77: united → United
-    285 291
-    Token 78: states → States
-    291 292
-    Token 79: . → .
-    293 296
-    Token 80: the → The
-    297 302
-    Token 81: album → album
-    303 311
-    Token 82: formally → formally
-    312 322
-    Token 83: introduces → introduces
-    323 330
-    Token 84: beyonce → Beyoncé
+    Token 59: in → in
+    209 210
+    Token 60: a → a
+    211 217
+    Token 61: single → single
+    218 222
+    Token 62: game → game
+    223 225
+    Token 63: of → of
+    226 229
+    Token 64: the → the
+    230 240
+    Token 65: tournament → tournament
+    241 245
+    Token 66: with → with
+    246 248
+    Token 67: 61 → 61
+    248 249
+    Token 68: . → .
+    250 258
+    Token 69: although → Although
+    259 262
+    Token 70: the → the
+    263 267
+    Token 71: team → team
+    268 271
+    Token 72: has → has
+    272 277
+    Token 73: never → never
+    278 281
+    Token 74: won → won
+    282 285
+    Token 75: the → the
+    286 290
+    Token 76: ncaa → NCAA
+    291 301
+    Token 77: tournament → Tournament
+    301 302
+    Token 78: , → ,
+    303 307
+    Token 79: they → they
+    308 312
+    Token 80: were → were
+    313 318
+    Token 81: named → named
+    319 321
+    Token 82: by → by
+    322 325
+    Token 83: the → the
+    326 330
+    Token 84: helm → Helm
     330 331
-    Token 85: ' → '
-    331 332
-    Token 86: s → s
-    333 338
-    Token 87: alter → alter
-    339 342
-    Token 88: ego → ego
-    343 348
-    Token 89: sasha → Sasha
-    349 355
-    Token 90: fierce → Fierce
-    355 356
-    Token 91: , → ,
-    357 366
-    Token 92: conceived → conceived
-    367 373
-    Token 93: during → during
-    374 377
-    Token 94: the → the
-    378 384
-    Token 95: making → making
-    385 387
-    Token 96: of → of
-    388 391
-    Token 97: her → her
-    392 396
-    Token 98: 2003 → 2003
-    397 403
-    Token 99: single → single
-    404 405
-    Token 100: " → "
-    405 410
-    Token 101: crazy → Crazy
-    411 413
-    Token 102: in → in
-    414 418
-    Token 103: love → Love
-    418 419
-    Token 104: " → "
-    419 420
-    Token 105: , → ,
-    421 428
-    Token 106: selling → selling
-    429 431
-    Token 107: 48 → 48
-    431 432
-    Token 108: ##2 → 2
-    432 433
-    Token 109: , → ,
-    433 436
-    Token 110: 000 → 000
-    437 443
-    Token 111: copies → copies
-    444 446
-    Token 112: in → in
-    447 450
-    Token 113: its → its
-    451 456
-    Token 114: first → first
-    457 461
-    Token 115: week → week
-    461 462
-    Token 116: , → ,
-    463 471
-    Token 117: debuting → debuting
-    472 476
-    Token 118: atop → atop
-    477 480
-    Token 119: the → the
-    481 490
-    Token 120: billboard → Billboard
-    491 494
-    Token 121: 200 → 200
-    494 495
-    Token 122: , → ,
-    496 499
-    Token 123: and → and
-    500 506
-    Token 124: giving → giving
-    507 514
-    Token 125: beyonce → Beyoncé
-    515 518
-    Token 126: her → her
-    519 524
-    Token 127: third → third
-    525 536
-    Token 128: consecutive → consecutive
-    537 543
-    Token 129: number → number
-    543 544
-    Token 130: - → -
-    544 547
-    Token 131: one → one
-    548 553
-    Token 132: album → album
-    554 556
-    Token 133: in → in
-    557 560
-    Token 134: the → the
-    561 563
-    Token 135: us → US
-    563 564
-    Token 136: . → .
-    565 568
-    Token 137: the → The
-    569 574
-    Token 138: album → album
-    575 583
-    Token 139: featured → featured
+    Token 85: ##s → s
+    332 340
+    Token 86: athletic → Athletic
+    341 351
+    Token 87: foundation → Foundation
+    352 354
+    Token 88: as → as
+    355 363
+    Token 89: national → national
+    364 373
+    Token 90: champions → champions
+    374 379
+    Token 91: twice → twice
+    379 380
+    Token 92: . → .
+    381 384
+    Token 93: the → The
+    385 389
+    Token 94: team → team
+    390 393
+    Token 95: has → has
+    394 406
+    Token 96: orchestrated → orchestrated
+    407 408
+    Token 97: a → a
+    409 415
+    Token 98: number → number
+    416 418
+    Token 99: of → of
+    419 424
+    Token 100: upset → upset
+    424 425
+    Token 101: ##s → s
+    426 428
+    Token 102: of → of
+    429 435
+    Token 103: number → number
+    436 439
+    Token 104: one → one
+    440 446
+    Token 105: ranked → ranked
+    447 452
+    Token 106: teams → teams
+    452 453
+    Token 107: , → ,
+    454 457
+    Token 108: the → the
+    458 462
+    Token 109: most → most
+    463 470
+    Token 110: notable → notable
+    471 473
+    Token 111: of → of
+    474 479
+    Token 112: which → which
+    480 483
+    Token 113: was → was
+    484 490
+    Token 114: ending → ending
+    491 495
+    Token 115: ucla → UCLA
+    495 496
+    Token 116: ' → '
+    496 497
+    Token 117: s → s
+    498 504
+    Token 118: record → record
+    505 507
+    Token 119: 88 → 88
+    507 508
+    Token 120: - → -
+    508 512
+    Token 121: game → game
+    513 520
+    Token 122: winning → winning
+    521 527
+    Token 123: streak → streak
+    528 530
+    Token 124: in → in
+    531 535
+    Token 125: 1974 → 1974
+    535 536
+    Token 126: . → .
+    537 540
+    Token 127: the → The
+    541 545
+    Token 128: team → team
+    546 549
+    Token 129: has → has
+    550 556
+    Token 130: beaten → beaten
+    557 559
+    Token 131: an → an
+    560 570
+    Token 132: additional → additional
+    571 576
+    Token 133: eight → eight
+    577 583
+    Token 134: number → number
+    583 584
+    Token 135: - → -
     584 587
-    Token 140: the → the
-    588 594
-    Token 141: number → number
-    594 595
-    Token 142: - → -
+    Token 136: one → one
+    588 593
+    Token 137: teams → teams
+    593 594
+    Token 138: , → ,
     595 598
-    Token 143: one → one
-    599 603
-    Token 144: song → song
-    604 605
-    Token 145: " → "
-    605 611
-    Token 146: single → Single
-    612 618
-    Token 147: ladies → Ladies
-    619 620
-    Token 148: ( → (
-    620 623
-    Token 149: put → Put
-    624 625
-    Token 150: a → a
-    626 630
-    Token 151: ring → Ring
-    631 633
-    Token 152: on → on
-    634 636
-    Token 153: it → It
+    Token 139: and → and
+    599 604
+    Token 140: those → those
+    605 609
+    Token 141: nine → nine
+    610 614
+    Token 142: wins → wins
+    615 619
+    Token 143: rank → rank
+    620 626
+    Token 144: second → second
+    626 627
+    Token 145: , → ,
+    628 630
+    Token 146: to → to
+    631 635
+    Token 147: ucla → UCLA
+    635 636
+    Token 148: ' → '
     636 637
-    Token 154: ) → )
-    637 638
-    Token 155: " → "
-    639 642
-    Token 156: and → and
-    643 646
-    Token 157: the → the
-    647 650
-    Token 158: top → top
-    650 651
-    Token 159: - → -
-    651 655
-    Token 160: five → five
-    656 661
-    Token 161: songs → songs
-    662 663
-    Token 162: " → "
-    663 665
-    Token 163: if → If
-    666 667
-    Token 164: i → I
-    668 672
-    Token 165: were → Were
-    673 674
-    Token 166: a → a
-    675 678
-    Token 167: boy → Boy
-    678 679
-    Token 168: " → "
-    680 683
-    Token 169: and → and
-    684 685
-    Token 170: " → "
+    Token 149: s → s
+    638 640
+    Token 150: 10 → 10
+    640 641
+    Token 151: , → ,
+    642 645
+    Token 152: all → all
+    645 646
+    Token 153: - → -
+    646 650
+    Token 154: time → time
+    651 653
+    Token 155: in → in
+    654 658
+    Token 156: wins → wins
+    659 666
+    Token 157: against → against
+    667 670
+    Token 158: the → the
+    671 674
+    Token 159: top → top
+    675 679
+    Token 160: team → team
+    679 680
+    Token 161: . → .
+    681 684
+    Token 162: the → The
     685 689
-    Token 171: halo → Halo
-    689 690
-    Token 172: " → "
-    690 691
-    Token 173: . → .
-    692 701
-    Token 174: achieving → Achieving
-    702 705
-    Token 175: the → the
-    706 720
-    Token 176: accomplishment → accomplishment
-    721 723
-    Token 177: of → of
-    724 732
-    Token 178: becoming → becoming
-    733 736
-    Token 179: her → her
-    737 744
-    Token 180: longest → longest
-    744 745
-    Token 181: - → -
-    745 752
-    Token 182: running → running
-    753 756
-    Token 183: hot → Hot
-    757 760
-    Token 184: 100 → 100
-    761 767
-    Token 185: single → single
-    768 770
-    Token 186: in → in
-    771 774
-    Token 187: her → her
-    775 781
-    Token 188: career → career
-    781 782
-    Token 189: , → ,
-    783 784
-    Token 190: " → "
-    784 788
-    Token 191: halo → Halo
-    788 789
-    Token 192: " → "
-    789 790
-    Token 193: ' → '
-    790 791
-    Token 194: s → s
-    792 799
-    Token 195: success → success
-    800 802
-    Token 196: in → in
-    803 806
-    Token 197: the → the
-    807 809
-    Token 198: us → US
-    810 816
-    Token 199: helped → helped
-    817 824
-    Token 200: beyonce → Beyoncé
-    825 831
-    Token 201: attain → attain
-    832 836
-    Token 202: more → more
-    837 840
-    Token 203: top → top
-    840 841
-    Token 204: - → -
-    841 844
-    Token 205: ten → ten
-    845 852
-    Token 206: singles → singles
-    853 855
-    Token 207: on → on
-    856 859
-    Token 208: the → the
-    860 864
-    Token 209: list → list
-    865 869
-    Token 210: than → than
-    870 873
-    Token 211: any → any
-    874 879
-    Token 212: other → other
-    880 885
-    Token 213: woman → woman
-    886 892
-    Token 214: during → during
-    893 896
-    Token 215: the → the
-    897 902
-    Token 216: 2000s → 2000s
-    902 903
-    Token 217: . → .
-    904 906
-    Token 218: it → It
-    907 911
-    Token 219: also → also
-    912 920
-    Token 220: included → included
+    Token 163: team → team
+    690 695
+    Token 164: plays → plays
+    696 698
+    Token 165: in → in
+    699 704
+    Token 166: newly → newly
+    705 714
+    Token 167: renovated → renovated
+    715 722
+    Token 168: purcell → Purcell
+    723 731
+    Token 169: pavilion → Pavilion
+    732 733
+    Token 170: ( → (
+    733 739
+    Token 171: within → within
+    740 743
+    Token 172: the → the
+    744 750
+    Token 173: edmund → Edmund
+    751 752
+    Token 174: p → P
+    752 753
+    Token 175: . → .
+    754 759
+    Token 176: joyce → Joyce
+    760 766
+    Token 177: center → Center
+    766 767
+    Token 178: ) → )
+    767 768
+    Token 179: , → ,
+    769 774
+    Token 180: which → which
+    775 783
+    Token 181: reopened → reopened
+    784 787
+    Token 182: for → for
+    788 791
+    Token 183: the → the
+    792 801
+    Token 184: beginning → beginning
+    802 804
+    Token 185: of → of
+    805 808
+    Token 186: the → the
+    809 813
+    Token 187: 2009 → 2009
+    813 814
+    Token 188: – → –
+    814 818
+    Token 189: 2010 → 2010
+    819 825
+    Token 190: season → season
+    825 826
+    Token 191: . → .
+    827 830
+    Token 192: the → The
+    831 835
+    Token 193: team → team
+    836 838
+    Token 194: is → is
+    839 846
+    Token 195: coached → coached
+    847 849
+    Token 196: by → by
+    850 854
+    Token 197: mike → Mike
+    855 857
+    Token 198: br → Br
+    857 859
+    Token 199: ##ey → ey
+    859 860
+    Token 200: , → ,
+    861 864
+    Token 201: who → who
+    864 865
+    Token 202: , → ,
+    866 868
+    Token 203: as → as
+    869 871
+    Token 204: of → of
+    872 875
+    Token 205: the → the
+    876 880
+    Token 206: 2014 → 2014
+    880 881
+    Token 207: – → –
+    881 883
+    Token 208: 15 → 15
+    884 890
+    Token 209: season → season
+    890 891
+    Token 210: , → ,
+    892 895
+    Token 211: his → his
+    896 905
+    Token 212: fifteenth → fifteenth
+    906 908
+    Token 213: at → at
+    909 914
+    Token 214: notre → Notre
+    915 919
+    Token 215: dame → Dame
+    919 920
+    Token 216: , → ,
     921 924
-    Token 221: the → the
-    925 935
-    Token 222: successful → successful
-    936 937
-    Token 223: " → "
-    937 942
-    Token 224: sweet → Sweet
-    943 949
-    Token 225: dreams → Dreams
-    949 950
-    Token 226: " → "
+    Token 217: has → has
+    925 933
+    Token 218: achieved → achieved
+    934 935
+    Token 219: a → a
+    936 939
+    Token 220: 332 → 332
+    939 940
+    Token 221: - → -
+    940 943
+    Token 222: 165 → 165
+    944 950
+    Token 223: record → record
     950 951
-    Token 227: , → ,
-    952 955
-    Token 228: and → and
-    956 963
-    Token 229: singles → singles
-    964 965
-    Token 230: " → "
+    Token 224: . → .
+    952 954
+    Token 225: in → In
+    955 959
+    Token 226: 2009 → 2009
+    960 964
+    Token 227: they → they
     965 969
-    Token 231: diva → Diva
-    969 970
-    Token 232: " → "
-    970 971
-    Token 233: , → ,
-    972 973
-    Token 234: " → "
-    973 976
-    Token 235: ego → Ego
-    976 977
-    Token 236: " → "
-    977 978
-    Token 237: , → ,
-    979 980
-    Token 238: " → "
-    980 986
-    Token 239: broken → Broken
-    986 987
-    Token 240: - → -
-    987 994
-    Token 241: hearted → Hearted
-    995 999
-    Token 242: girl → Girl
-    999 1000
-    Token 243: " → "
-    1001 1004
-    Token 244: and → and
-    1005 1006
-    Token 245: " → "
-    1006 1011
-    Token 246: video → Video
-    1012 1017
-    Token 247: phone → Phone
-    1017 1018
-    Token 248: " → "
-    1018 1019
-    Token 249: . → .
-    1020 1023
-    Token 250: the → The
-    1024 1029
-    Token 251: music → music
-    1030 1035
-    Token 252: video → video
-    1036 1039
-    Token 253: for → for
-    1040 1041
-    Token 254: " → "
-    1041 1047
-    Token 255: single → Single
-    1048 1054
-    Token 256: ladies → Ladies
-    1054 1055
-    Token 257: " → "
-    1056 1059
-    Token 258: has → has
-    1060 1064
-    Token 259: been → been
-    1065 1068
-    Token 260: par → par
-    1068 1070
-    Token 261: ##od → od
+    Token 228: were → were
+    970 977
+    Token 229: invited → invited
+    978 980
+    Token 230: to → to
+    981 984
+    Token 231: the → the
+    985 987
+    Token 232: ni → NI
+    987 988
+    Token 233: ##t → T
+    988 989
+    Token 234: , → ,
+    990 995
+    Token 235: where → where
+    996 1000
+    Token 236: they → they
+    1001 1009
+    Token 237: advanced → advanced
+    1010 1012
+    Token 238: to → to
+    1013 1016
+    Token 239: the → the
+    1017 1027
+    Token 240: semifinals → semifinals
+    1028 1031
+    Token 241: but → but
+    1032 1036
+    Token 242: were → were
+    1037 1043
+    Token 243: beaten → beaten
+    1044 1046
+    Token 244: by → by
+    1047 1051
+    Token 245: penn → Penn
+    1052 1057
+    Token 246: state → State
+    1058 1061
+    Token 247: who → who
+    1062 1066
+    Token 248: went → went
+    1067 1069
+    Token 249: on → on
     1070 1073
-    Token 262: ##ied → ied
-    1074 1077
-    Token 263: and → and
-    1078 1080
-    Token 264: im → im
-    1080 1086
-    Token 265: ##itated → itated
-    1087 1093
-    Token 266: around → around
-    1094 1097
-    Token 267: the → the
-    1098 1103
-    Token 268: world → world
-    1103 1104
-    Token 269: , → ,
-    1105 1113
-    Token 270: spawning → spawning
-    1114 1117
-    Token 271: the → the
-    1118 1119
-    Token 272: " → "
-    1119 1124
-    Token 273: first → first
-    1125 1130
-    Token 274: major → major
-    1131 1136
-    Token 275: dance → dance
-    1137 1139
-    Token 276: cr → cr
-    1139 1141
-    Token 277: ##az → az
-    1141 1142
-    Token 278: ##e → e
-    1142 1143
-    Token 279: " → "
-    1144 1146
-    Token 280: of → of
-    1147 1150
-    Token 281: the → the
-    1151 1159
-    Token 282: internet → Internet
-    1160 1163
-    Token 283: age → age
-    1164 1173
-    Token 284: according → according
-    1174 1176
-    Token 285: to → to
-    1177 1180
-    Token 286: the → the
-    1181 1188
-    Token 287: toronto → Toronto
+    Token 250: and → and
+    1074 1078
+    Token 251: beat → beat
+    1079 1085
+    Token 252: baylor → Baylor
+    1086 1088
+    Token 253: in → in
+    1089 1092
+    Token 254: the → the
+    1093 1105
+    Token 255: championship → championship
+    1105 1106
+    Token 256: . → .
+    1107 1110
+    Token 257: the → The
+    1111 1115
+    Token 258: 2010 → 2010
+    1115 1116
+    Token 259: – → –
+    1116 1118
+    Token 260: 11 → 11
+    1119 1123
+    Token 261: team → team
+    1124 1133
+    Token 262: concluded → concluded
+    1134 1137
+    Token 263: its → its
+    1138 1145
+    Token 264: regular → regular
+    1146 1152
+    Token 265: season → season
+    1153 1159
+    Token 266: ranked → ranked
+    1160 1166
+    Token 267: number → number
+    1167 1172
+    Token 268: seven → seven
+    1173 1175
+    Token 269: in → in
+    1176 1179
+    Token 270: the → the
+    1180 1187
+    Token 271: country → country
+    1187 1188
+    Token 272: , → ,
     1189 1193
-    Token 288: star → Star
-    1193 1194
-    Token 289: . → .
-    1195 1198
-    Token 290: the → The
-    1199 1204
-    Token 291: video → video
-    1205 1208
-    Token 292: has → has
-    1209 1212
-    Token 293: won → won
-    1213 1220
-    Token 294: several → several
-    1221 1227
-    Token 295: awards → awards
-    1227 1228
-    Token 296: , → ,
-    1229 1238
-    Token 297: including → including
-    1239 1243
-    Token 298: best → Best
-    1244 1249
-    Token 299: video → Video
-    1250 1252
-    Token 300: at → at
-    1253 1256
-    Token 301: the → the
-    1257 1261
-    Token 302: 2009 → 2009
-    1262 1265
-    Token 303: mtv → MTV
-    1266 1272
-    Token 304: europe → Europe
-    1273 1278
-    Token 305: music → Music
-    1279 1285
-    Token 306: awards → Awards
-    1285 1286
-    Token 307: , → ,
-    1287 1290
-    Token 308: the → the
-    1291 1295
-    Token 309: 2009 → 2009
-    1296 1304
-    Token 310: scottish → Scottish
-    1305 1308
-    Token 311: mob → MOB
-    1308 1309
-    Token 312: ##o → O
-    1310 1316
-    Token 313: awards → Awards
-    1316 1317
-    Token 314: , → ,
-    1318 1321
-    Token 315: and → and
-    1322 1325
-    Token 316: the → the
-    1326 1330
-    Token 317: 2009 → 2009
-    1331 1334
-    Token 318: bet → BET
-    1335 1341
-    Token 319: awards → Awards
-    1341 1342
-    Token 320: . → .
-    1343 1345
-    Token 321: at → At
+    Token 273: with → with
+    1194 1195
+    Token 274: a → a
+    1196 1202
+    Token 275: record → record
+    1203 1205
+    Token 276: of → of
+    1206 1208
+    Token 277: 25 → 25
+    1208 1209
+    Token 278: – → –
+    1209 1210
+    Token 279: 5 → 5
+    1210 1211
+    Token 280: , → ,
+    1212 1214
+    Token 281: br → Br
+    1214 1216
+    Token 282: ##ey → ey
+    1216 1217
+    Token 283: ' → '
+    1217 1218
+    Token 284: s → s
+    1219 1224
+    Token 285: fifth → fifth
+    1225 1233
+    Token 286: straight → straight
+    1234 1236
+    Token 287: 20 → 20
+    1236 1237
+    Token 288: - → -
+    1237 1240
+    Token 289: win → win
+    1241 1247
+    Token 290: season → season
+    1247 1248
+    Token 291: , → ,
+    1249 1252
+    Token 292: and → and
+    1253 1254
+    Token 293: a → a
+    1255 1261
+    Token 294: second → second
+    1261 1262
+    Token 295: - → -
+    1262 1267
+    Token 296: place → place
+    1268 1274
+    Token 297: finish → finish
+    1275 1277
+    Token 298: in → in
+    1278 1281
+    Token 299: the → the
+    1282 1285
+    Token 300: big → Big
+    1286 1290
+    Token 301: east → East
+    1290 1291
+    Token 302: . → .
+    1292 1298
+    Token 303: during → During
+    1299 1302
+    Token 304: the → the
+    1303 1307
+    Token 305: 2014 → 2014
+    1307 1308
+    Token 306: - → -
+    1308 1310
+    Token 307: 15 → 15
+    1311 1317
+    Token 308: season → season
+    1317 1318
+    Token 309: , → ,
+    1319 1322
+    Token 310: the → the
+    1323 1327
+    Token 311: team → team
+    1328 1332
+    Token 312: went → went
+    1333 1335
+    Token 313: 32 → 32
+    1335 1336
+    Token 314: - → -
+    1336 1337
+    Token 315: 6 → 6
+    1338 1341
+    Token 316: and → and
+    1342 1345
+    Token 317: won → won
     1346 1349
-    Token 322: the → the
-    1350 1354
-    Token 323: 2009 → 2009
-    1355 1358
-    Token 324: mtv → MTV
-    1359 1364
-    Token 325: video → Video
-    1365 1370
-    Token 326: music → Music
-    1371 1377
-    Token 327: awards → Awards
-    1377 1378
-    Token 328: , → ,
-    1379 1382
-    Token 329: the → the
-    1383 1388
-    Token 330: video → video
-    1389 1392
-    Token 331: was → was
-    1393 1402
-    Token 332: nominated → nominated
-    1403 1406
-    Token 333: for → for
-    1407 1411
-    Token 334: nine → nine
-    1412 1418
-    Token 335: awards → awards
-    1418 1419
-    Token 336: , → ,
-    1420 1430
-    Token 337: ultimately → ultimately
-    1431 1438
-    Token 338: winning → winning
-    1439 1444
-    Token 339: three → three
-    1445 1454
-    Token 340: including → including
-    1455 1460
-    Token 341: video → Video
-    1461 1463
-    Token 342: of → of
-    1464 1467
-    Token 343: the → the
-    1468 1472
-    Token 344: year → Year
-    1472 1473
-    Token 345: . → .
-    1474 1477
-    Token 346: its → Its
-    1478 1485
-    Token 347: failure → failure
-    1486 1488
-    Token 348: to → to
-    1489 1492
-    Token 349: win → win
-    1493 1496
-    Token 350: the → the
-    1497 1501
-    Token 351: best → Best
-    1502 1508
-    Token 352: female → Female
-    1509 1514
-    Token 353: video → Video
-    1515 1523
-    Token 354: category → category
-    1523 1524
-    Token 355: , → ,
-    1525 1530
-    Token 356: which → which
-    1531 1535
-    Token 357: went → went
-    1536 1538
-    Token 358: to → to
-    1539 1547
-    Token 359: american → American
-    1548 1555
-    Token 360: country → country
+    Token 318: the → the
+    1350 1353
+    Token 319: acc → ACC
+    1354 1364
+    Token 320: conference → conference
+    1365 1375
+    Token 321: tournament → tournament
+    1375 1376
+    Token 322: , → ,
+    1377 1382
+    Token 323: later → later
+    1383 1392
+    Token 324: advancing → advancing
+    1393 1395
+    Token 325: to → to
+    1396 1399
+    Token 326: the → the
+    1400 1405
+    Token 327: elite → Elite
+    1406 1407
+    Token 328: 8 → 8
+    1407 1408
+    Token 329: , → ,
+    1409 1414
+    Token 330: where → where
+    1415 1418
+    Token 331: the → the
+    1419 1427
+    Token 332: fighting → Fighting
+    1428 1433
+    Token 333: irish → Irish
+    1434 1438
+    Token 334: lost → lost
+    1439 1441
+    Token 335: on → on
+    1442 1443
+    Token 336: a → a
+    1444 1450
+    Token 337: missed → missed
+    1451 1455
+    Token 338: buzz → buzz
+    1455 1457
+    Token 339: ##er → er
+    1457 1458
+    Token 340: - → -
+    1458 1462
+    Token 341: beat → beat
+    1462 1464
+    Token 342: ##er → er
+    1465 1472
+    Token 343: against → against
+    1473 1477
+    Token 344: then → then
+    1478 1488
+    Token 345: undefeated → undefeated
+    1489 1497
+    Token 346: kentucky → Kentucky
+    1497 1498
+    Token 347: . → .
+    1499 1502
+    Token 348: led → Led
+    1503 1505
+    Token 349: by → by
+    1506 1509
+    Token 350: nba → NBA
+    1510 1515
+    Token 351: draft → draft
+    1516 1521
+    Token 352: picks → picks
+    1522 1524
+    Token 353: je → Je
+    1524 1528
+    Token 354: ##rian → rian
+    1529 1534
+    Token 355: grant → Grant
+    1535 1538
+    Token 356: and → and
+    1539 1542
+    Token 357: pat → Pat
+    1543 1546
+    Token 358: con → Con
+    1546 1548
+    Token 359: ##na → na
+    1548 1552
+    Token 360: ##ught → ught
+    1552 1554
+    Token 361: ##on → on
+    1554 1555
+    Token 362: , → ,
     1556 1559
-    Token 361: pop → pop
-    1560 1566
-    Token 362: singer → singer
-    1567 1573
-    Token 363: taylor → Taylor
-    1574 1579
-    Token 364: swift → Swift
-    1579 1580
-    Token 365: ' → '
-    1580 1581
-    Token 366: s → s
-    1582 1583
-    Token 367: " → "
-    1583 1586
-    Token 368: you → You
-    1587 1593
-    Token 369: belong → Belong
-    1594 1598
-    Token 370: with → with
-    1599 1601
-    Token 371: me → Me
-    1601 1602
-    Token 372: " → "
-    1602 1603
-    Token 373: , → ,
-    1604 1607
-    Token 374: led → led
-    1608 1610
-    Token 375: to → to
-    1611 1616
-    Token 376: kanye → Kanye
-    1617 1621
-    Token 377: west → West
-    1622 1634
-    Token 378: interrupting → interrupting
-    1635 1638
-    Token 379: the → the
-    1639 1647
-    Token 380: ceremony → ceremony
-    1648 1651
-    Token 381: and → and
-    1652 1659
-    Token 382: beyonce → Beyoncé
+    Token 363: the → the
+    1560 1568
+    Token 364: fighting → Fighting
+    1569 1574
+    Token 365: irish → Irish
+    1575 1579
+    Token 366: beat → beat
+    1580 1583
+    Token 367: the → the
+    1584 1592
+    Token 368: eventual → eventual
+    1593 1601
+    Token 369: national → national
+    1602 1610
+    Token 370: champion → champion
+    1611 1615
+    Token 371: duke → Duke
+    1616 1620
+    Token 372: blue → Blue
+    1621 1627
+    Token 373: devils → Devils
+    1628 1633
+    Token 374: twice → twice
+    1634 1640
+    Token 375: during → during
+    1641 1644
+    Token 376: the → the
+    1645 1651
+    Token 377: season → season
+    1651 1652
+    Token 378: . → .
+    1653 1656
+    Token 379: the → The
+    1657 1659
+    Token 380: 32 → 32
+    1660 1664
+    Token 381: wins → wins
+    1665 1669
+    Token 382: were → were
     0 0
     Token 383: [SEP] → 
     
     === 分块 1 ===
     0 0
     Token 0: [CLS] → 
-    0 7
-    Token 1: beyonce → Beyonce
-    8 11
-    Token 2: got → got
-    12 19
-    Token 3: married → married
-    20 22
-    Token 4: in → in
-    23 27
-    Token 5: 2008 → 2008
-    28 30
-    Token 6: to → to
-    31 35
-    Token 7: whom → whom
-    35 36
-    Token 8: ? → ?
+    0 3
+    Token 1: how → How
+    4 8
+    Token 2: many → many
+    9 13
+    Token 3: wins → wins
+    14 18
+    Token 4: does → does
+    19 22
+    Token 5: the → the
+    23 28
+    Token 6: notre → Notre
+    29 33
+    Token 7: dame → Dame
+    34 37
+    Token 8: men → men
+    37 38
+    Token 9: ' → '
+    38 39
+    Token 10: s → s
+    40 50
+    Token 11: basketball → basketball
+    51 55
+    Token 12: team → team
+    56 60
+    Token 13: have → have
+    60 61
+    Token 14: ? → ?
     0 0
-    Token 9: [SEP] → 
-    1041 1047
-    Token 10: single → Single
-    1048 1054
-    Token 11: ladies → Ladies
-    1054 1055
-    Token 12: " → "
-    1056 1059
-    Token 13: has → has
-    1060 1064
-    Token 14: been → been
-    1065 1068
-    Token 15: par → par
-    1068 1070
-    Token 16: ##od → od
-    1070 1073
-    Token 17: ##ied → ied
-    1074 1077
-    Token 18: and → and
-    1078 1080
-    Token 19: im → im
-    1080 1086
-    Token 20: ##itated → itated
-    1087 1093
-    Token 21: around → around
-    1094 1097
-    Token 22: the → the
-    1098 1103
-    Token 23: world → world
-    1103 1104
-    Token 24: , → ,
-    1105 1113
-    Token 25: spawning → spawning
-    1114 1117
-    Token 26: the → the
-    1118 1119
-    Token 27: " → "
-    1119 1124
-    Token 28: first → first
-    1125 1130
-    Token 29: major → major
-    1131 1136
-    Token 30: dance → dance
-    1137 1139
-    Token 31: cr → cr
-    1139 1141
-    Token 32: ##az → az
-    1141 1142
-    Token 33: ##e → e
-    1142 1143
-    Token 34: " → "
-    1144 1146
-    Token 35: of → of
-    1147 1150
-    Token 36: the → the
-    1151 1159
-    Token 37: internet → Internet
-    1160 1163
-    Token 38: age → age
-    1164 1173
-    Token 39: according → according
-    1174 1176
-    Token 40: to → to
-    1177 1180
-    Token 41: the → the
-    1181 1188
-    Token 42: toronto → Toronto
+    Token 15: [SEP] → 
+    1093 1105
+    Token 16: championship → championship
+    1105 1106
+    Token 17: . → .
+    1107 1110
+    Token 18: the → The
+    1111 1115
+    Token 19: 2010 → 2010
+    1115 1116
+    Token 20: – → –
+    1116 1118
+    Token 21: 11 → 11
+    1119 1123
+    Token 22: team → team
+    1124 1133
+    Token 23: concluded → concluded
+    1134 1137
+    Token 24: its → its
+    1138 1145
+    Token 25: regular → regular
+    1146 1152
+    Token 26: season → season
+    1153 1159
+    Token 27: ranked → ranked
+    1160 1166
+    Token 28: number → number
+    1167 1172
+    Token 29: seven → seven
+    1173 1175
+    Token 30: in → in
+    1176 1179
+    Token 31: the → the
+    1180 1187
+    Token 32: country → country
+    1187 1188
+    Token 33: , → ,
     1189 1193
-    Token 43: star → Star
-    1193 1194
-    Token 44: . → .
-    1195 1198
-    Token 45: the → The
-    1199 1204
-    Token 46: video → video
-    1205 1208
-    Token 47: has → has
-    1209 1212
-    Token 48: won → won
-    1213 1220
-    Token 49: several → several
-    1221 1227
-    Token 50: awards → awards
-    1227 1228
-    Token 51: , → ,
-    1229 1238
-    Token 52: including → including
-    1239 1243
-    Token 53: best → Best
-    1244 1249
-    Token 54: video → Video
-    1250 1252
-    Token 55: at → at
-    1253 1256
-    Token 56: the → the
-    1257 1261
-    Token 57: 2009 → 2009
-    1262 1265
-    Token 58: mtv → MTV
-    1266 1272
-    Token 59: europe → Europe
-    1273 1278
-    Token 60: music → Music
-    1279 1285
-    Token 61: awards → Awards
-    1285 1286
-    Token 62: , → ,
-    1287 1290
-    Token 63: the → the
-    1291 1295
-    Token 64: 2009 → 2009
-    1296 1304
-    Token 65: scottish → Scottish
-    1305 1308
-    Token 66: mob → MOB
-    1308 1309
-    Token 67: ##o → O
-    1310 1316
-    Token 68: awards → Awards
-    1316 1317
-    Token 69: , → ,
-    1318 1321
-    Token 70: and → and
-    1322 1325
+    Token 34: with → with
+    1194 1195
+    Token 35: a → a
+    1196 1202
+    Token 36: record → record
+    1203 1205
+    Token 37: of → of
+    1206 1208
+    Token 38: 25 → 25
+    1208 1209
+    Token 39: – → –
+    1209 1210
+    Token 40: 5 → 5
+    1210 1211
+    Token 41: , → ,
+    1212 1214
+    Token 42: br → Br
+    1214 1216
+    Token 43: ##ey → ey
+    1216 1217
+    Token 44: ' → '
+    1217 1218
+    Token 45: s → s
+    1219 1224
+    Token 46: fifth → fifth
+    1225 1233
+    Token 47: straight → straight
+    1234 1236
+    Token 48: 20 → 20
+    1236 1237
+    Token 49: - → -
+    1237 1240
+    Token 50: win → win
+    1241 1247
+    Token 51: season → season
+    1247 1248
+    Token 52: , → ,
+    1249 1252
+    Token 53: and → and
+    1253 1254
+    Token 54: a → a
+    1255 1261
+    Token 55: second → second
+    1261 1262
+    Token 56: - → -
+    1262 1267
+    Token 57: place → place
+    1268 1274
+    Token 58: finish → finish
+    1275 1277
+    Token 59: in → in
+    1278 1281
+    Token 60: the → the
+    1282 1285
+    Token 61: big → Big
+    1286 1290
+    Token 62: east → East
+    1290 1291
+    Token 63: . → .
+    1292 1298
+    Token 64: during → During
+    1299 1302
+    Token 65: the → the
+    1303 1307
+    Token 66: 2014 → 2014
+    1307 1308
+    Token 67: - → -
+    1308 1310
+    Token 68: 15 → 15
+    1311 1317
+    Token 69: season → season
+    1317 1318
+    Token 70: , → ,
+    1319 1322
     Token 71: the → the
-    1326 1330
-    Token 72: 2009 → 2009
-    1331 1334
-    Token 73: bet → BET
-    1335 1341
-    Token 74: awards → Awards
-    1341 1342
-    Token 75: . → .
-    1343 1345
-    Token 76: at → At
+    1323 1327
+    Token 72: team → team
+    1328 1332
+    Token 73: went → went
+    1333 1335
+    Token 74: 32 → 32
+    1335 1336
+    Token 75: - → -
+    1336 1337
+    Token 76: 6 → 6
+    1338 1341
+    Token 77: and → and
+    1342 1345
+    Token 78: won → won
     1346 1349
-    Token 77: the → the
-    1350 1354
-    Token 78: 2009 → 2009
-    1355 1358
-    Token 79: mtv → MTV
-    1359 1364
-    Token 80: video → Video
-    1365 1370
-    Token 81: music → Music
-    1371 1377
-    Token 82: awards → Awards
-    1377 1378
+    Token 79: the → the
+    1350 1353
+    Token 80: acc → ACC
+    1354 1364
+    Token 81: conference → conference
+    1365 1375
+    Token 82: tournament → tournament
+    1375 1376
     Token 83: , → ,
-    1379 1382
-    Token 84: the → the
-    1383 1388
-    Token 85: video → video
-    1389 1392
-    Token 86: was → was
-    1393 1402
-    Token 87: nominated → nominated
-    1403 1406
-    Token 88: for → for
-    1407 1411
-    Token 89: nine → nine
-    1412 1418
-    Token 90: awards → awards
-    1418 1419
-    Token 91: , → ,
-    1420 1430
-    Token 92: ultimately → ultimately
-    1431 1438
-    Token 93: winning → winning
-    1439 1444
-    Token 94: three → three
-    1445 1454
-    Token 95: including → including
-    1455 1460
-    Token 96: video → Video
-    1461 1463
-    Token 97: of → of
-    1464 1467
-    Token 98: the → the
-    1468 1472
-    Token 99: year → Year
-    1472 1473
-    Token 100: . → .
-    1474 1477
-    Token 101: its → Its
-    1478 1485
-    Token 102: failure → failure
-    1486 1488
-    Token 103: to → to
-    1489 1492
-    Token 104: win → win
-    1493 1496
-    Token 105: the → the
-    1497 1501
-    Token 106: best → Best
-    1502 1508
-    Token 107: female → Female
-    1509 1514
-    Token 108: video → Video
-    1515 1523
-    Token 109: category → category
-    1523 1524
-    Token 110: , → ,
-    1525 1530
-    Token 111: which → which
-    1531 1535
-    Token 112: went → went
-    1536 1538
-    Token 113: to → to
-    1539 1547
-    Token 114: american → American
-    1548 1555
-    Token 115: country → country
+    1377 1382
+    Token 84: later → later
+    1383 1392
+    Token 85: advancing → advancing
+    1393 1395
+    Token 86: to → to
+    1396 1399
+    Token 87: the → the
+    1400 1405
+    Token 88: elite → Elite
+    1406 1407
+    Token 89: 8 → 8
+    1407 1408
+    Token 90: , → ,
+    1409 1414
+    Token 91: where → where
+    1415 1418
+    Token 92: the → the
+    1419 1427
+    Token 93: fighting → Fighting
+    1428 1433
+    Token 94: irish → Irish
+    1434 1438
+    Token 95: lost → lost
+    1439 1441
+    Token 96: on → on
+    1442 1443
+    Token 97: a → a
+    1444 1450
+    Token 98: missed → missed
+    1451 1455
+    Token 99: buzz → buzz
+    1455 1457
+    Token 100: ##er → er
+    1457 1458
+    Token 101: - → -
+    1458 1462
+    Token 102: beat → beat
+    1462 1464
+    Token 103: ##er → er
+    1465 1472
+    Token 104: against → against
+    1473 1477
+    Token 105: then → then
+    1478 1488
+    Token 106: undefeated → undefeated
+    1489 1497
+    Token 107: kentucky → Kentucky
+    1497 1498
+    Token 108: . → .
+    1499 1502
+    Token 109: led → Led
+    1503 1505
+    Token 110: by → by
+    1506 1509
+    Token 111: nba → NBA
+    1510 1515
+    Token 112: draft → draft
+    1516 1521
+    Token 113: picks → picks
+    1522 1524
+    Token 114: je → Je
+    1524 1528
+    Token 115: ##rian → rian
+    1529 1534
+    Token 116: grant → Grant
+    1535 1538
+    Token 117: and → and
+    1539 1542
+    Token 118: pat → Pat
+    1543 1546
+    Token 119: con → Con
+    1546 1548
+    Token 120: ##na → na
+    1548 1552
+    Token 121: ##ught → ught
+    1552 1554
+    Token 122: ##on → on
+    1554 1555
+    Token 123: , → ,
     1556 1559
-    Token 116: pop → pop
-    1560 1566
-    Token 117: singer → singer
-    1567 1573
-    Token 118: taylor → Taylor
-    1574 1579
-    Token 119: swift → Swift
-    1579 1580
-    Token 120: ' → '
-    1580 1581
-    Token 121: s → s
-    1582 1583
-    Token 122: " → "
-    1583 1586
-    Token 123: you → You
-    1587 1593
-    Token 124: belong → Belong
-    1594 1598
-    Token 125: with → with
-    1599 1601
-    Token 126: me → Me
-    1601 1602
-    Token 127: " → "
-    1602 1603
-    Token 128: , → ,
-    1604 1607
-    Token 129: led → led
-    1608 1610
-    Token 130: to → to
-    1611 1616
-    Token 131: kanye → Kanye
-    1617 1621
-    Token 132: west → West
-    1622 1634
-    Token 133: interrupting → interrupting
-    1635 1638
-    Token 134: the → the
-    1639 1647
-    Token 135: ceremony → ceremony
-    1648 1651
-    Token 136: and → and
-    1652 1659
-    Token 137: beyonce → Beyoncé
-    1660 1663
-    Token 138: imp → imp
-    1663 1666
-    Token 139: ##rov → rov
-    1666 1671
-    Token 140: ##ising → ising
-    1672 1673
-    Token 141: a → a
-    1674 1676
-    Token 142: re → re
-    1676 1677
-    Token 143: - → -
-    1677 1689
-    Token 144: presentation → presentation
-    1690 1692
-    Token 145: of → of
-    1693 1698
-    Token 146: swift → Swift
-    1698 1699
-    Token 147: ' → '
-    1699 1700
-    Token 148: s → s
-    1701 1706
-    Token 149: award → award
-    1707 1713
-    Token 150: during → during
-    1714 1717
-    Token 151: her → her
-    1718 1721
-    Token 152: own → own
-    1722 1732
-    Token 153: acceptance → acceptance
-    1733 1739
-    Token 154: speech → speech
-    1739 1740
+    Token 124: the → the
+    1560 1568
+    Token 125: fighting → Fighting
+    1569 1574
+    Token 126: irish → Irish
+    1575 1579
+    Token 127: beat → beat
+    1580 1583
+    Token 128: the → the
+    1584 1592
+    Token 129: eventual → eventual
+    1593 1601
+    Token 130: national → national
+    1602 1610
+    Token 131: champion → champion
+    1611 1615
+    Token 132: duke → Duke
+    1616 1620
+    Token 133: blue → Blue
+    1621 1627
+    Token 134: devils → Devils
+    1628 1633
+    Token 135: twice → twice
+    1634 1640
+    Token 136: during → during
+    1641 1644
+    Token 137: the → the
+    1645 1651
+    Token 138: season → season
+    1651 1652
+    Token 139: . → .
+    1653 1656
+    Token 140: the → The
+    1657 1659
+    Token 141: 32 → 32
+    1660 1664
+    Token 142: wins → wins
+    1665 1669
+    Token 143: were → were
+    1670 1673
+    Token 144: the → the
+    1674 1678
+    Token 145: most → most
+    1679 1681
+    Token 146: by → by
+    1682 1685
+    Token 147: the → the
+    1686 1694
+    Token 148: fighting → Fighting
+    1695 1700
+    Token 149: irish → Irish
+    1701 1705
+    Token 150: team → team
+    1706 1711
+    Token 151: since → since
+    1712 1716
+    Token 152: 1908 → 1908
+    1716 1717
+    Token 153: - → -
+    1717 1719
+    Token 154: 09 → 09
+    1719 1720
     Token 155: . → .
-    1741 1743
-    Token 156: in → In
-    1744 1749
-    Token 157: march → March
-    1750 1754
-    Token 158: 2009 → 2009
-    1754 1755
-    Token 159: , → ,
-    1756 1763
-    Token 160: beyonce → Beyoncé
-    1764 1772
-    Token 161: embarked → embarked
-    1773 1775
-    Token 162: on → on
-    1776 1779
-    Token 163: the → the
-    1780 1781
-    Token 164: i → I
-    1782 1784
-    Token 165: am → Am
-    1784 1785
-    Token 166: . → .
-    1785 1786
-    Token 167: . → .
-    1786 1787
-    Token 168: . → .
-    1788 1793
-    Token 169: world → World
-    1794 1798
-    Token 170: tour → Tour
-    1798 1799
-    Token 171: , → ,
-    1800 1803
-    Token 172: her → her
-    1804 1810
-    Token 173: second → second
-    1811 1821
-    Token 174: headlining → headlining
-    1822 1831
-    Token 175: worldwide → worldwide
-    1832 1839
-    Token 176: concert → concert
-    1840 1844
-    Token 177: tour → tour
-    1844 1845
-    Token 178: , → ,
-    1846 1856
-    Token 179: consisting → consisting
-    1857 1859
-    Token 180: of → of
-    1860 1863
-    Token 181: 108 → 108
-    1864 1869
-    Token 182: shows → shows
-    1869 1870
-    Token 183: , → ,
-    1871 1879
-    Token 184: grossing → grossing
-    1880 1881
-    Token 185: $ → $
-    1881 1884
-    Token 186: 119 → 119
-    1884 1885
-    Token 187: . → .
-    1885 1886
-    Token 188: 5 → 5
-    1887 1894
-    Token 189: million → million
-    1894 1895
-    Token 190: . → .
     0 0
-    Token 191: [SEP] → 
+    Token 156: [SEP] → 
 
 
 用最简单的比喻解释这段代码：
@@ -2023,7 +1977,7 @@ example["question"]
 
 
 
-    'Beyonce got married in 2008 to whom?'
+    "How many wins does the Notre Dame men's basketball team have?"
 
 
 
@@ -2035,7 +1989,7 @@ example["context"]
 
 
 
-    'On April 4, 2008, Beyoncé married Jay Z. She publicly revealed their marriage in a video montage at the listening party for her third studio album, I Am... Sasha Fierce, in Manhattan\'s Sony Club on October 22, 2008. I Am... Sasha Fierce was released on November 18, 2008 in the United States. The album formally introduces Beyoncé\'s alter ego Sasha Fierce, conceived during the making of her 2003 single "Crazy in Love", selling 482,000 copies in its first week, debuting atop the Billboard 200, and giving Beyoncé her third consecutive number-one album in the US. The album featured the number-one song "Single Ladies (Put a Ring on It)" and the top-five songs "If I Were a Boy" and "Halo". Achieving the accomplishment of becoming her longest-running Hot 100 single in her career, "Halo"\'s success in the US helped Beyoncé attain more top-ten singles on the list than any other woman during the 2000s. It also included the successful "Sweet Dreams", and singles "Diva", "Ego", "Broken-Hearted Girl" and "Video Phone". The music video for "Single Ladies" has been parodied and imitated around the world, spawning the "first major dance craze" of the Internet age according to the Toronto Star. The video has won several awards, including Best Video at the 2009 MTV Europe Music Awards, the 2009 Scottish MOBO Awards, and the 2009 BET Awards. At the 2009 MTV Video Music Awards, the video was nominated for nine awards, ultimately winning three including Video of the Year. Its failure to win the Best Female Video category, which went to American country pop singer Taylor Swift\'s "You Belong with Me", led to Kanye West interrupting the ceremony and Beyoncé improvising a re-presentation of Swift\'s award during her own acceptance speech. In March 2009, Beyoncé embarked on the I Am... World Tour, her second headlining worldwide concert tour, consisting of 108 shows, grossing $119.5 million.'
+    "The men's basketball team has over 1,600 wins, one of only 12 schools who have reached that mark, and have appeared in 28 NCAA tournaments. Former player Austin Carr holds the record for most points scored in a single game of the tournament with 61. Although the team has never won the NCAA Tournament, they were named by the Helms Athletic Foundation as national champions twice. The team has orchestrated a number of upsets of number one ranked teams, the most notable of which was ending UCLA's record 88-game winning streak in 1974. The team has beaten an additional eight number-one teams, and those nine wins rank second, to UCLA's 10, all-time in wins against the top team. The team plays in newly renovated Purcell Pavilion (within the Edmund P. Joyce Center), which reopened for the beginning of the 2009–2010 season. The team is coached by Mike Brey, who, as of the 2014–15 season, his fifteenth at Notre Dame, has achieved a 332-165 record. In 2009 they were invited to the NIT, where they advanced to the semifinals but were beaten by Penn State who went on and beat Baylor in the championship. The 2010–11 team concluded its regular season ranked number seven in the country, with a record of 25–5, Brey's fifth straight 20-win season, and a second-place finish in the Big East. During the 2014-15 season, the team went 32-6 and won the ACC conference tournament, later advancing to the Elite 8, where the Fighting Irish lost on a missed buzzer-beater against then undefeated Kentucky. Led by NBA draft picks Jerian Grant and Pat Connaughton, the Fighting Irish beat the eventual national champion Duke Blue Devils twice during the season. The 32 wins were the most by the Fighting Irish team since 1908-09."
 
 
 
@@ -2052,7 +2006,119 @@ sequence_ids = tokenized_example.sequence_ids()
 print(sequence_ids)
 ```
 
-    [None, 0, 0, 0, 0, 0, 0, 0, 0, None, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, None]
+    [None, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, None, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, None]
+
+
+ **`sequence_ids`**：
+
+---
+
+### **类比场景**
+想象你在玩一个**双色荧光笔标记**的游戏：
+- **黄色**：标记问题（比如："贝爷哪年结婚？"）
+- **蓝色**：标记书中的答案段落（比如书里写："贝爷2008年结婚..."）
+- **红色**：标记特殊符号（比如书的封面、章节分隔页）
+
+`sequence_ids` 就是一个**颜色编号列表**，告诉你每个字属于哪部分。
+
+---
+
+### **三种标记规则**
+1. **`None` → 红色标记**  
+   - 对应特殊符号：`[CLS]`（开头标志）、`[SEP]`（分隔符）
+   - 例：`[CLS]` → `None`
+
+2. **`0` → 黄色标记**  
+   - 所有来自**问题**的文字  
+   - 例："贝爷"、"哪年" → `0`
+
+3. **`1` → 蓝色标记**  
+   - 所有来自**书本文档**的文字  
+   - 例："2008年"、"结婚" → `1`
+
+---
+
+### **实际效果示例**
+假设问题和文档组合后：
+```
+[CLS] 贝爷哪年结婚？ [SEP] 贝爷2008年与Jay-Z结婚... [SEP]
+```
+
+对应的 `sequence_ids` 就像这样：
+```
+[ None, 0,0,0,0, None, 1,1,1,1,1, None ]
+```
+可视化标记：
+```
+红色 [CLS] → 黄黄黄黄 → 红色 [SEP] → 蓝蓝蓝蓝蓝 → 红色 [SEP]
+```
+
+---
+
+### **核心用途**
+1. **快速定位答案范围**  
+   ```python
+   # 找到文档部分的起止位置
+   start = sequence_ids.index(1)                 # 第一个蓝色标记的位置
+   end = len(sequence_ids) - sequence_ids[::-1].index(1) - 1  # 最后一个蓝色标记
+   ```
+
+2. **过滤无效内容**  
+   ```python
+   # 只处理文档部分的文字
+   if sequence_ids[i] == 1:
+       print("这是书里的内容！")
+   ```
+
+3. **处理长文本分块**  
+   - 当文档太长时，自动分成多块，每块都有自己的 `sequence_ids`
+   - 例：分块1的蓝色标记对应文档前半部分，分块2对应后半部分
+
+---
+
+### **为什么需要它？**
+就像读书时用荧光笔划重点：
+- **黄色**：明确问题（知道要找什么）
+- **蓝色**：快速锁定答案区域（不用读完整本书）
+- **红色**：忽略无关的封面/分隔页
+
+这让模型像人类一样：先看问题，再快速翻书找答案位置，而不是傻傻通读全文。
+
+
+```python
+# 检查分块数量
+num_chunks = len(tokenized_example["input_ids"])
+print(f"生成分块数: {num_chunks}")
+
+# 遍历每个分块
+for chunk_idx in range(num_chunks):
+    print(f"\n=== 分块 {chunk_idx} ===")
+    
+    # 正确获取当前分块的数据
+    chunk_input_ids = tokenized_example["input_ids"][chunk_idx]
+    chunk_sequence_ids = tokenized_example.sequence_ids(chunk_idx)  # 关键修复点
+    
+    # 打印关键信息
+    print(f"Token数量: {len(chunk_input_ids)}")
+    print(f"sequence_ids结构: {chunk_sequence_ids[:20]}...")  # 打印前20个元素
+    
+    # 检查问题部分是否完整
+    question_segment = [i for i, sid in enumerate(chunk_sequence_ids) if sid == 0]
+    print(f"问题部分覆盖的token位置: {question_segment[:5]}...")
+
+```
+
+    生成分块数: 2
+    
+    === 分块 0 ===
+    Token数量: 384
+    sequence_ids结构: [None, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, None, 1, 1, 1, 1]...
+    问题部分覆盖的token位置: [1, 2, 3, 4, 5]...
+    
+    === 分块 1 ===
+    Token数量: 157
+    sequence_ids结构: [None, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, None, 1, 1, 1, 1]...
+    问题部分覆盖的token位置: [1, 2, 3, 4, 5]...
 
 
 
@@ -2061,6 +2127,9 @@ answers = example["answers"]
 start_char = answers["answer_start"][0]
 end_char = start_char + len(answers["text"][0])
 
+print(answers)
+print(start_char)
+print(end_char)
 # 当前span在文本中的起始标记索引。
 token_start_index = 0
 while sequence_ids[token_start_index] != 1:
@@ -2088,7 +2157,10 @@ else:
 
 ```
 
-    18 19
+    {'text': ['over 1,600'], 'answer_start': [30]}
+    30
+    40
+    23 26
 
 
 打印检查是否准确找到了起始位置：
@@ -2101,8 +2173,8 @@ print(tokenizer.decode(tokenized_example["input_ids"][0][start_position: end_pos
 print(answers["text"][0])
 ```
 
-    jay z
-    Jay Z
+    over 1, 600
+    over 1,600
 
 
 #### 关于填充的策略
@@ -2199,6 +2271,97 @@ def prepare_train_features(examples):
     return tokenized_examples
 ```
 
+---
+
+### **功能目标**
+这个函数就像一位 **数据加工厂的流水线工人**，负责把原始问答数据改造成适合模型理解的格式。主要解决两个问题：
+1. **长文本切割**：当答案文章太长时，切成多个短块（类似将长视频分段）
+2. **答案定位**：在每个短块中标注答案的位置（类似视频剪辑时标记精彩片段的起止时间）
+
+---
+
+### **核心处理步骤**
+
+#### **1. 清理问题文字（去左空格）**
+- **问题**：用户提问可能包含多余空格，例如 `"   Beyonce哪年结婚？"`
+- **处理**：去掉左边的空格 → `"Beyonce哪年结婚？"`
+- **原因**：防止空格占用分词名额，导致正文被过度截断
+
+#### **2. 文本分块处理**
+- **操作**：将长文章切成多个小块（每块最长 `max_length`，块间重叠 `stride`）
+- **示例**：
+  ```
+  原文章：段落1...段落2...段落3...（总长超过max_length）
+  分块1：段落1...段落2（前半）
+  分块2：段落2（后半）...段落3
+  ```
+
+#### **3. 记录分块关系**
+- **overflow_to_sample_mapping**：记录每个分块属于哪个原始样本  
+  （类似快递分箱时在每箱贴原订单号）
+- **offset_mapping**：记录每个分词对应的原始字符位置  
+  （类似每块积木对应原图纸的位置）
+
+#### **4. 处理无答案情况**
+- **场景**：当答案不在当前分块中（例如答案在另一个分块里）
+- **标记**：将答案位置设为 `[CLS]` 的位置（模型看到这个就知道当前块无答案）
+
+#### **5. 精确定位答案**
+- **步骤**：
+  1. **确定答案字符范围**：`start_char` 到 `end_char`
+  2. **找到分块的上下文部分**（跳过问题和特殊标记）
+  3. **检查答案是否在本分块**：
+     - 是 → 调整到精确的分词位置
+     - 否 → 标记为 `[CLS]`
+
+---
+
+### **实际案例演示**
+**输入数据**：
+```python
+{
+    "question": "Beyonce哪年结婚？",
+    "context": "Beyonce于2008年与Jay-Z结婚...（长文本）",
+    "answers": {"text": ["2008年"], "answer_start": }
+}
+```
+
+**处理过程**：
+1. **分块**：将长 `context` 分成两个块
+2. **块1处理**：
+   - 发现答案 `2008年` 在块1中
+   - 标注起始位置为 `token 6`，结束位置为 `token 7`
+3. **块2处理**：
+   - 块2不包含答案 → 标注为 `[CLS]`
+
+**输出特征**：
+```python
+{
+    "input_ids": [101, 2345, 3456, ..., 102],  # 分块后的token
+    "start_positions": 6, 
+    "end_positions": 7
+}
+```
+
+---
+
+### **参数控制行为**
+| 参数 | 作用 | 类比解释 |
+|------|------|----------|
+| `max_length=384` | 每块最大长度 | 每段视频最长5分钟 |
+| `stride=128` | 分块间重叠长度 | 两段视频间重叠30秒防止漏内容 |
+| `pad_on_right=True` | 问题在右/左填充 | 字幕在视频左下方还是右下方 |
+
+---
+
+### **总结**
+这个函数就像一位智能剪辑师：
+1. **切分长视频**（分块处理）
+2. **标记关键片段**（答案定位）
+3. **处理特殊情况**（无答案时打标记）
+
+最终输出模型可以直接学习的标准化数据格式，是训练高质量问答模型的关键预处理步骤！ 🚀
+
 #### datasets.map 的进阶使用
 
 使用 `datasets.map` 方法将 `prepare_train_features` 应用于所有训练、验证和测试数据：
@@ -2208,6 +2371,70 @@ def prepare_train_features(examples):
 - load_from_cache_file：是否使用datasets库的自动缓存
 
 datasets 库针对大规模数据，实现了高效缓存机制，能够自动检测传递给 map 的函数是否已更改（因此需要不使用缓存数据）。如果在调用 map 时设置 `load_from_cache_file=False`，可以强制重新应用预处理。
+
+---
+
+### **核心流程类比**
+想象你经营一个 **大型快递分拣中心**，需要处理三种包裹（训练集、验证集、测试集）。`datasets.map` 就是你的 **自动化分拣流水线**，`prepare_train_features` 是你定制的 **智能分拣规则**。
+
+---
+
+### **分拣线参数解析**
+```python
+tokenized_datasets = datasets.map(
+    prepare_train_features,  # 你的智能分拣规则
+    batched=True,            # 整箱处理（而不是单件）
+    remove_columns=原始包裹标签  # 撕掉旧标签
+)
+```
+
+#### 1. **`batched=True` → 整箱处理模式**
+- **传统方式**：工人逐个检查包裹（单条数据处理）
+- **高效模式**：整箱倒进机器，同时处理数百个包裹（批量处理）
+- **优势**：速度提升 10-100 倍，特别适合 GPU 并行计算
+
+#### 2. **`remove_columns` → 清除旧标签**
+- **原因**：经过分拣后，包裹形状改变（数据列变化）
+- **操作**：
+  - 原始标签：发件人、收件人（`question`, `context` 等）
+  - 新标签：目的地代码、重量分级（`input_ids`, `attention_mask` 等）
+- **示例**：就像快递重新包装后，需要去掉旧面单
+
+#### 3. **缓存机制 → 智能暂存区**
+- **自动检测**：如果分拣规则没变，直接使用暂存区处理好的包裹
+- **强制刷新**：`load_from_cache_file=False` 就像要求「不管有没有旧包裹，全部重新分拣」
+- **优势**：节省 70% 以上时间，避免重复劳动
+
+---
+
+### **完整工作流程**
+1. **收包裹**：三种类型包裹进入流水线（训练/验证/测试集）
+2. **规则应用**：
+   - 智能切割大包裹（长文本分块）
+   - 贴上精准目的地标签（答案位置标记）
+   - 丢弃破损包裹（无效样本）
+3. **输出结果**：
+   - 标准化快递箱（模型可读的 `input_ids` 等）
+   - 精准物流标签（`start_positions`, `end_positions`）
+
+---
+
+### **技术细节对应**
+| 快递场景 | 数据处理 |
+|---------|----------|
+| 包裹类型区分 | 保持训练/验证/测试集结构 |
+| 分拣机器人 | `prepare_train_features` 函数 |
+| 整箱处理 | 批量矩阵运算 |
+| 暂存区 | Hugging Face 的缓存文件（通常存于 ~/.cache/huggingface/datasets）|
+
+---
+
+### **为什么需要这样设计？**
+1. **效率优先**：如同快递行业追求每日百万件处理量，深度学习的核心就是 **大规模数据吞吐**
+2. **资源管理**：缓存机制像双十一的预售包装，提前完成部分工作减轻高峰压力
+3. **质量管控**：`remove_columns` 确保不会把生鲜和普通包裹混淆（防止数据污染）
+
+通过这套系统，你的模型就像高效的物流网络，能快速准确地将「问题包裹」送达「答案目的地」！🚚✨
 
 
 ```python
@@ -2232,6 +2459,122 @@ tokenized_datasets = datasets.map(prepare_train_features,
 
 警告通知我们正在丢弃一些权重（`vocab_transform` 和 `vocab_layer_norm` 层），并随机初始化其他一些权重（`pre_classifier` 和 `classifier` 层）。在微调模型情况下是绝对正常的，因为我们正在删除用于预训练模型的掩码语言建模任务的头部，并用一个新的头部替换它，对于这个新头部，我们没有预训练的权重，所以库会警告我们在用它进行推理之前应该对这个模型进行微调，而这正是我们要做的事情。
 
+---
+
+### 一、任务与模型类的对应关系
+Hugging Face Transformers 库为不同任务提供了专用类，就像选择不同的工具：
+
+| 任务类型                  | 对应模型类                          | 示例场景                     |
+|--------------------------|-----------------------------------|----------------------------|
+| 文本分类                  | `AutoModelForSequenceClassification` | 情感分析、评分预测          |
+| 问答任务                  | `AutoModelForQuestionAnswering`     | SQuAD 问答、阅读理解        |
+| 文本生成                  | `AutoModelForCausalLM`              | 故事续写、对话生成          |
+| 掩码语言建模              | `AutoModelForMaskedLM`              | BERT 式填空任务             |
+| 序列到序列                | `AutoModelForSeq2SeqLM`             | 翻译、摘要生成              |
+| 标记分类                  | `AutoModelForTokenClassification`   | 命名实体识别、词性标注      |
+| 多选任务                  | `AutoModelForMultipleChoice`        | 多选题回答                  |
+
+---
+
+### 二、Transformers 库的主要模型类
+以下是常用的模型类（以 **BERT** 架构为例，其他模型类似）：
+
+#### 1. 基础模型
+```python
+from transformers import AutoModel
+model = AutoModel.from_pretrained("bert-base-uncased")  # 通用特征提取
+```
+
+#### 2. 任务专用模型
+```python
+# 文本分类（如情感分析）
+AutoModelForSequenceClassification.from_pretrained(...)
+
+# 问答任务（如SQuAD）
+AutoModelForQuestionAnswering.from_pretrained(...)
+
+# 文本生成（如GPT风格）
+AutoModelForCausalLM.from_pretrained(...)
+
+# 序列到序列（如BART/T5）
+AutoModelForSeq2SeqLM.from_pretrained(...)
+
+# 标记级分类（如NER）
+AutoModelForTokenClassification.from_pretrained(...)
+```
+
+---
+
+### 三、处理自定义任务的三种方案
+如果你的任务没有现成类，可以通过以下方法解决：
+
+#### 方案 1：改造现有模型（推荐）
+```python
+from transformers import AutoModel
+
+# 加载基础模型
+model = AutoModel.from_pretrained("bert-base-uncased")
+
+# 添加自定义头部
+class CustomModel(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.bert = model
+        self.custom_head = nn.Linear(768, 3)  # 假设你的任务需要3类输出
+        
+    def forward(self, inputs):
+        outputs = self.bert(**inputs)
+        pooled = outputs.last_hidden_state[:,0]  # 取CLS标记
+        return self.custom_head(pooled)
+```
+
+#### 方案 2：继承并扩展
+```python
+from transformers import BertPreTrainedModel, BertModel
+
+class MyCustomModel(BertPreTrainedModel):
+    def __init__(self, config):
+        super().__init__(config)
+        self.bert = BertModel(config)
+        self.my_layer = nn.Linear(config.hidden_size, 5)  # 自定义输出维度
+
+    def forward(self, input_ids, attention_mask=None):
+        outputs = self.bert(input_ids, attention_mask=attention_mask)
+        sequence_output = outputs.last_hidden_state
+        return self.my_layer(sequence_output[:,0])  # 使用CLS标记
+```
+
+#### 方案 3：使用 `AutoModelWithHeads`
+（需安装 `adapters` 库）
+```python
+from transformers.adapters import AutoAdapterModel
+
+model = AutoAdapterModel.from_pretrained("bert-base-uncased")
+model.add_classification_head("my_task", num_labels=3)  # 添加分类头
+```
+
+---
+
+### 四、关于警告信息的解释
+当你看到类似这样的警告：
+```
+Some weights were not used... (vocab_transform, vocab_layer_norm)
+You should probably TRAIN this model...
+```
+这是 **正常现象**！因为：
+1. 预训练模型的原始头部（如MLM头部）被移除
+2. 新的任务头部（如分类器）需要重新训练
+3. 库在提醒你需要微调后才能用于推理
+
+---
+
+### 五、学习资源推荐
+1. [官方任务指南](https://huggingface.co/docs/transformers/task_summary)
+2. [自定义模型教程](https://huggingface.co/docs/transformers/custom_models)
+3. [社区论坛](https://discuss.huggingface.co/)（遇到问题时优先搜索）
+
+通过灵活组合这些方法，你可以应对任何自定义任务需求！🚀
+
 
 ```python
 from transformers import AutoModelForQuestionAnswering, TrainingArguments, Trainer
@@ -2239,9 +2582,87 @@ from transformers import AutoModelForQuestionAnswering, TrainingArguments, Train
 model = AutoModelForQuestionAnswering.from_pretrained(model_checkpoint)
 ```
 
-    Some weights of DistilBertForQuestionAnswering were not initialized from the model checkpoint at distilbert-base-uncased and are newly initialized: ['qa_outputs.weight', 'qa_outputs.bias']
+    Some weights of DistilBertForQuestionAnswering were not initialized from the model checkpoint at distilbert-base-uncased and are newly initialized: ['qa_outputs.bias', 'qa_outputs.weight']
     You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
 
+
+#### TensorBoard
+
+
+```python
+from tensorboard import version
+print("TensorBoard 版本:", version.VERSION)
+```
+
+    TensorBoard 版本: 2.19.0
+
+
+
+```python
+%load_ext tensorboard
+
+# 指定日志目录和端口（注意这里的端口要与检测的8001一致）
+log_dir = "your_logs_directory"  # 替换为实际的日志目录路径
+%tensorboard --logdir $log_dir --port 8001 --bind_all
+```
+
+    The tensorboard extension is already loaded. To reload it, use:
+      %reload_ext tensorboard
+
+
+
+    Reusing TensorBoard on port 8001 (pid 1319472), started 17:47:30 ago. (Use '!kill 1319472' to kill it.)
+
+
+
+
+<iframe id="tensorboard-frame-6c031199972a8469" width="100%" height="800" frameborder="0">
+</iframe>
+<script>
+  (function() {
+    const frame = document.getElementById("tensorboard-frame-6c031199972a8469");
+    const url = new URL("/", window.location);
+    const port = 8001;
+    if (port) {
+      url.port = port;
+    }
+    frame.src = url;
+  })();
+</script>
+
+
+
+
+```python
+import socket
+# 创建TCP套接字
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# 尝试连接本地8001端口（非阻塞方式）
+result = sock.connect_ex(('localhost', 8001))
+# 断言验证（0表示端口开放）
+assert result == 0, "TensorBoard 端口 8001 未开启！"
+```
+
+
+```python
+# 有问题，暂时不用，先训练
+
+# import evaluate
+
+# # 加载F1指标（支持分类任务的micro/macro/weighted）
+# squad_metric = evaluate.load("/root/projects/LLM-learning/evaluate/squad_v2.py" if squad_v2 else "/root/projects/LLM-learning/evaluate/squad.py")
+
+# # 定义计算函数（处理模型输出）
+# def compute_metrics(eval_pred):
+#     predictions, labels = eval_pred
+#     predictions = np.argmax(predictions, axis=1)  # 分类任务取最大概率类别
+#     return squad_metric.compute(
+#         predictions=predictions, 
+#         references=labels,
+#         average="macro"  # "micro"（全局统计）、"macro"（类别平均）、"weighted"（加权平均）
+#     )
+
+```
 
 #### 训练超参数（TrainingArguments）
 
@@ -2251,13 +2672,16 @@ batch_size=64
 model_dir = f"models/{model_checkpoint}-finetuned-squad"
 
 args = TrainingArguments(
-    output_dir=model_dir,
-    evaluation_strategy = "epoch",
-    learning_rate=2e-5,
-    per_device_train_batch_size=batch_size,
-    per_device_eval_batch_size=batch_size,
-    num_train_epochs=3,
-    weight_decay=0.01,
+    output_dir=model_dir,  # 模型/日志保存路径
+    evaluation_strategy = "epoch",  # 每个epoch后评估（可选"steps"按步评估）
+    learning_rate=2e-5,  # 经典微调学习率（预训练模型的典型学习率范围：1e-5~5e-5）
+    per_device_train_batch_size=batch_size,  # 每个GPU的训练批次（总batch_size = 该值 * GPU数量）
+    per_device_eval_batch_size=batch_size,   # 每个GPU的评估批次（可大于训练batch_size）
+    num_train_epochs=3,  # 训练轮次（SQuAD等中型数据集常用2-5轮）
+    weight_decay=0.01,  # L2正则化强度（防止过拟合，常用0.01-0.1）
+    fp16=True,  # 启用FP16混合精度
+    # save_strategy="epoch",       # 每个epoch保存检查点
+    # load_best_model_at_end=True, # 训练结束加载最佳模型
 )
 ```
 
@@ -2291,7 +2715,7 @@ trainer = Trainer(
 )
 ```
 
-    Detected kernel version 4.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+    Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
 
 
 #### GPU 使用情况
@@ -2305,18 +2729,18 @@ trainer = Trainer(
 NVIDIA GPU 使用情况：
 
 ```shell
-Every 1.0s: nvidia-smi                                                   Wed Dec 20 15:39:57 2023
+Every 5.0s: nvidia-smi                                                                                                                                 deepseek-r1-t4-test: Wed Mar 12 17:52:30 2025
 
-Wed Dec 20 15:39:57 2023
+Wed Mar 12 17:52:30 2025
 +---------------------------------------------------------------------------------------+
-| NVIDIA-SMI 535.129.03             Driver Version: 535.129.03   CUDA Version: 12.2     |
+| NVIDIA-SMI 535.216.03             Driver Version: 535.216.03   CUDA Version: 12.2     |
 |-----------------------------------------+----------------------+----------------------+
 | GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
 | Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
 |                                         |                      |               MIG M. |
 |=========================================+======================+======================|
-|   0  Tesla T4                       Off | 00000000:00:0D.0 Off |                    0 |
-| N/A   67C    P0              67W /  70W |  14617MiB / 15360MiB |    100%      Default |
+|   0  Tesla T4                       On  | 00000000:00:07.0 Off |                    0 |
+| N/A   53C    P0              63W /  70W |  10945MiB / 15360MiB |    100%      Default |
 |                                         |                      |                  N/A |
 +-----------------------------------------+----------------------+----------------------+
 
@@ -2325,7 +2749,7 @@ Wed Dec 20 15:39:57 2023
 |  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
 |        ID   ID                                                             Usage      |
 |=======================================================================================|
-|    0   N/A  N/A     16384      C   /root/miniconda3/bin/python               14612MiB |
+|    0   N/A  N/A   1271234      C   /root/miniconda3/envs/peft/bin/python     10942MiB |
 +---------------------------------------------------------------------------------------+
 ```
 
@@ -2339,7 +2763,7 @@ trainer.train()
     <div>
 
       <progress value='4152' max='4152' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      [4152/4152 2:23:19, Epoch 3/3]
+      [4152/4152 49:18, Epoch 3/3]
     </div>
     <table border="1" class="dataframe">
   <thead>
@@ -2352,37 +2776,27 @@ trainer.train()
   <tbody>
     <tr>
       <td>1</td>
-      <td>1.491100</td>
-      <td>1.249441</td>
+      <td>1.498200</td>
+      <td>1.273643</td>
     </tr>
     <tr>
       <td>2</td>
-      <td>1.108800</td>
-      <td>1.161671</td>
+      <td>1.121800</td>
+      <td>1.185791</td>
     </tr>
     <tr>
       <td>3</td>
-      <td>0.975700</td>
-      <td>1.158766</td>
+      <td>0.985200</td>
+      <td>1.167942</td>
     </tr>
   </tbody>
 </table><p>
 
 
-    Checkpoint destination directory models/distilbert-base-uncased-finetuned-squad/checkpoint-500 already exists and is non-empty.Saving will proceed but saved results may be invalid.
-    Checkpoint destination directory models/distilbert-base-uncased-finetuned-squad/checkpoint-1000 already exists and is non-empty.Saving will proceed but saved results may be invalid.
-    Checkpoint destination directory models/distilbert-base-uncased-finetuned-squad/checkpoint-1500 already exists and is non-empty.Saving will proceed but saved results may be invalid.
-    Checkpoint destination directory models/distilbert-base-uncased-finetuned-squad/checkpoint-2000 already exists and is non-empty.Saving will proceed but saved results may be invalid.
-    Checkpoint destination directory models/distilbert-base-uncased-finetuned-squad/checkpoint-2500 already exists and is non-empty.Saving will proceed but saved results may be invalid.
-    Checkpoint destination directory models/distilbert-base-uncased-finetuned-squad/checkpoint-3000 already exists and is non-empty.Saving will proceed but saved results may be invalid.
-    Checkpoint destination directory models/distilbert-base-uncased-finetuned-squad/checkpoint-3500 already exists and is non-empty.Saving will proceed but saved results may be invalid.
-    Checkpoint destination directory models/distilbert-base-uncased-finetuned-squad/checkpoint-4000 already exists and is non-empty.Saving will proceed but saved results may be invalid.
 
 
 
-
-
-    TrainOutput(global_step=4152, training_loss=1.3038662743246854, metrics={'train_runtime': 8602.4737, 'train_samples_per_second': 30.872, 'train_steps_per_second': 0.483, 'total_flos': 2.602335381127373e+16, 'train_loss': 1.3038662743246854, 'epoch': 3.0})
+    TrainOutput(global_step=4152, training_loss=1.3124258081807336, metrics={'train_runtime': 2959.0362, 'train_samples_per_second': 89.749, 'train_steps_per_second': 1.403, 'total_flos': 2.602335381127373e+16, 'train_loss': 1.3124258081807336, 'epoch': 3.0})
 
 
 
@@ -2442,13 +2856,13 @@ output.start_logits.argmax(dim=-1), output.end_logits.argmax(dim=-1)
 
     (tensor([ 46,  57,  78,  43, 118, 108,  72,  35, 108,  34,  73,  41,  80,  91,
              156,  35,  83,  91,  80,  58,  77,  31,  42,  53,  41,  35,  42,  77,
-              11,  44,  27, 133,  66,  40,  87,  44,  43,  41, 127,  26,  28,  33,
+              11,  44,  27, 133,  66,  40,  87,  44,  43,  83, 127,  26,  28,  33,
               87, 127,  95,  25,  43, 132,  42,  29,  44,  46,  24,  44,  65,  58,
-              81,  14,  59,  72,  25,  36,  57,  43], device='cuda:0'),
+              81,  14,  59,  72,  25,  36,  55,  43], device='cuda:0'),
      tensor([ 47,  58,  81,  44, 118, 109,  75,  37, 109,  36,  76,  42,  83,  94,
              158,  35,  83,  94,  83,  60,  80,  31,  43,  54,  42,  35,  43,  80,
-              13,  45,  28, 133,  66,  41,  89,  45,  44,  42, 127,  27,  30,  34,
-              32, 127,  97,  26,  44, 132,  43,  30,  45,  47,  25,  45,  65,  59,
+              13,  45,  28, 133,  66,  41,  89,  45,  44,  85, 127,  27,  30,  34,
+              89, 127,  97,  26,  44, 132,  43,  30,  45,  47,  25,  45,  65,  59,
               81,  14,  60,  72,  25,  36,  58,  43], device='cuda:0'))
 
 
@@ -2649,39 +3063,38 @@ valid_answers
 
 
 
-    [{'score': 15.986347, 'text': 'Denver Broncos'},
-     {'score': 14.585561,
+    [{'score': 15.2265625, 'text': 'Denver Broncos'},
+     {'score': 13.082031,
       'text': 'Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers'},
-     {'score': 13.152991, 'text': 'Carolina Panthers'},
-     {'score': 12.38233, 'text': 'Broncos'},
-     {'score': 10.981544,
-      'text': 'Broncos defeated the National Football Conference (NFC) champion Carolina Panthers'},
-     {'score': 10.852013,
+     {'score': 11.640625, 'text': 'Carolina Panthers'},
+     {'score': 11.4296875, 'text': 'Broncos'},
+     {'score': 11.277344,
       'text': 'American Football Conference (AFC) champion Denver Broncos'},
-     {'score': 10.635618,
+     {'score': 10.154297,
       'text': 'The American Football Conference (AFC) champion Denver Broncos'},
-     {'score': 10.283654, 'text': 'Denver'},
-     {'score': 9.451225,
+     {'score': 10.123047, 'text': 'Denver'},
+     {'score': 9.285156,
+      'text': 'Broncos defeated the National Football Conference (NFC) champion Carolina Panthers'},
+     {'score': 9.1328125,
       'text': 'American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers'},
-     {'score': 9.234833,
+     {'score': 8.009766,
       'text': 'The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers'},
-     {'score': 8.7582445,
+     {'score': 8.008057,
       'text': 'Denver Broncos defeated the National Football Conference'},
-     {'score': 8.187819,
+     {'score': 7.694336,
       'text': 'Denver Broncos defeated the National Football Conference (NFC) champion Carolina'},
-     {'score': 8.134832, 'text': 'Panthers'},
-     {'score': 8.092252,
-      'text': 'Denver Broncos defeated the National Football Conference (NFC)'},
-     {'score': 7.7162285,
-      'text': 'the National Football Conference (NFC) champion Carolina Panthers'},
-     {'score': 7.595868,
-      'text': 'Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10'},
-     {'score': 7.382572,
-      'text': 'National Football Conference (NFC) champion Carolina Panthers'},
-     {'score': 7.320059,
+     {'score': 7.317871,
       'text': 'Denver Broncos defeated the National Football Conference (NFC'},
-     {'score': 6.755249, 'text': 'Carolina'},
-     {'score': 6.728976, 'text': 'champion Denver Broncos'}]
+     {'score': 7.251465,
+      'text': 'Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title.'},
+     {'score': 7.1833496,
+      'text': 'Denver Broncos defeated the National Football Conference (NFC)'},
+     {'score': 6.987793, 'text': 'AFC) champion Denver Broncos'},
+     {'score': 6.864746, 'text': 'champion Denver Broncos'},
+     {'score': 6.614258,
+      'text': 'National Football Conference (NFC) champion Carolina Panthers'},
+     {'score': 6.426758, 'text': 'Panthers'},
+     {'score': 6.2529297, 'text': 'Carolina'}]
 
 
 
@@ -2833,16 +3246,8 @@ final_predictions = postprocess_qa_predictions(datasets["validation"], validatio
 ```python
 from datasets import load_metric
 
-metric = load_metric("squad_v2" if squad_v2 else "squad")
+metric = load_metric("squad_v2" if squad_v2 else "squad", trust_remote_code=True)
 ```
-
-    /tmp/ipykernel_20254/2330875496.py:3: FutureWarning: load_metric is deprecated and will be removed in the next major version of datasets. Use 'evaluate.load' instead, from the new library 🤗 Evaluate: https://huggingface.co/docs/evaluate
-      metric = load_metric("squad_v2" if squad_v2 else "squad")
-    /root/miniconda3/lib/python3.11/site-packages/datasets/load.py:752: FutureWarning: The repository for squad contains custom code which must be executed to correctly load the metric. You can inspect the repository content at https://raw.githubusercontent.com/huggingface/datasets/2.16.1/metrics/squad/squad.py
-    You can avoid this message in future by passing the argument `trust_remote_code=True`.
-    Passing `trust_remote_code=True` will be mandatory to load this metric from the next major release of `datasets`.
-      warnings.warn(
-
 
 
     Downloading builder script:   0%|          | 0.00/1.72k [00:00<?, ?B/s]
@@ -2871,7 +3276,7 @@ metric.compute(predictions=formatted_predictions, references=references)
 
 
 
-    {'exact_match': 74.88174077578051, 'f1': 83.6359321422016}
+    {'exact_match': 74.33301797540209, 'f1': 83.26051790761488}
 
 
 
@@ -2880,7 +3285,7 @@ metric.compute(predictions=formatted_predictions, references=references)
 
 ```
 
-### Homework：加载本地保存的模型，进行评估和再训练更高的 F1 Score
+### 加载本地保存的模型，进行评估和再训练更高的 F1 Score
 
 
 ```python
@@ -2899,7 +3304,322 @@ trained_trainer = Trainer(
 )
 ```
 
-    Detected kernel version 4.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+    Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+
+
+
+```python
+trained_trainer.train()
+```
+
+
+
+    <div>
+
+      <progress value='4152' max='4152' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      [4152/4152 49:39, Epoch 3/3]
+    </div>
+    <table border="1" class="dataframe">
+  <thead>
+ <tr style="text-align: left;">
+      <th>Epoch</th>
+      <th>Training Loss</th>
+      <th>Validation Loss</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>0.846900</td>
+      <td>1.212233</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>0.713500</td>
+      <td>1.232366</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>0.686100</td>
+      <td>1.247295</td>
+    </tr>
+  </tbody>
+</table><p>
+
+
+    Checkpoint destination directory models/distilbert-base-uncased-finetuned-squad/checkpoint-500 already exists and is non-empty.Saving will proceed but saved results may be invalid.
+    Checkpoint destination directory models/distilbert-base-uncased-finetuned-squad/checkpoint-1000 already exists and is non-empty.Saving will proceed but saved results may be invalid.
+    Checkpoint destination directory models/distilbert-base-uncased-finetuned-squad/checkpoint-1500 already exists and is non-empty.Saving will proceed but saved results may be invalid.
+    Checkpoint destination directory models/distilbert-base-uncased-finetuned-squad/checkpoint-2000 already exists and is non-empty.Saving will proceed but saved results may be invalid.
+    Checkpoint destination directory models/distilbert-base-uncased-finetuned-squad/checkpoint-2500 already exists and is non-empty.Saving will proceed but saved results may be invalid.
+    Checkpoint destination directory models/distilbert-base-uncased-finetuned-squad/checkpoint-3000 already exists and is non-empty.Saving will proceed but saved results may be invalid.
+    Checkpoint destination directory models/distilbert-base-uncased-finetuned-squad/checkpoint-3500 already exists and is non-empty.Saving will proceed but saved results may be invalid.
+    Checkpoint destination directory models/distilbert-base-uncased-finetuned-squad/checkpoint-4000 already exists and is non-empty.Saving will proceed but saved results may be invalid.
+
+
+
+
+
+    TrainOutput(global_step=4152, training_loss=0.7533242697890324, metrics={'train_runtime': 2980.1413, 'train_samples_per_second': 89.114, 'train_steps_per_second': 1.393, 'total_flos': 2.602335381127373e+16, 'train_loss': 0.7533242697890324, 'epoch': 3.0})
+
+
+
+
+```python
+model_to_save_2 = trained_trainer.save_model(f"{model_dir}-2")
+```
+
+
+```python
+import torch
+
+for batch in trained_trainer.get_eval_dataloader():
+    break
+batch = {k: v.to(trained_trainer.args.device) for k, v in batch.items()}
+with torch.no_grad():
+    output = trained_trainer.model(**batch)
+output.keys()
+```
+
+
+
+
+    odict_keys(['loss', 'start_logits', 'end_logits'])
+
+
+
+
+```python
+output.start_logits.shape, output.end_logits.shape
+```
+
+
+
+
+    (torch.Size([64, 384]), torch.Size([64, 384]))
+
+
+
+
+```python
+output.start_logits.argmax(dim=-1), output.end_logits.argmax(dim=-1)
+```
+
+
+
+
+    (tensor([ 46,  57,  78,  54, 118, 107,  72,  35, 107,  34,  73,  52,  80,  91,
+             156,  35,  83,  91,  80,  58,  77,  31,  42,  53,  52,  35,  53,  77,
+              11,  44,  27, 133,  66,  40,  87,  44,  43,  41, 127,  26,  28,  33,
+              87, 127,  95,  25,  43, 132,  42,  29,  44,  46,  24,  44,  65,  58,
+              81,  14,  59,  72,  25,  36,  57,  43], device='cuda:0'),
+     tensor([ 47,  58,  81,  44, 118, 110,  75,  37, 110,  36,  76,  42,  83,  94,
+             158,  35,  83,  94,  83,  60,  80,  31,  43,  54,  42,  35,  43,  91,
+              13,  45,  28, 133,  66,  41,  89,  45,  44,  42, 127,  27,  30,  34,
+              90, 127,  97,  26,  44, 132,  43,  30,  45,  47,  25,  45,  65,  59,
+              81,  14,  60,  72,  25,  36,  58,  43], device='cuda:0'))
+
+
+
+
+```python
+n_best_size = 20
+```
+
+
+```python
+import numpy as np
+
+start_logits = output.start_logits[0].cpu().numpy()
+end_logits = output.end_logits[0].cpu().numpy()
+
+# 获取最佳的起始和结束位置的索引：
+start_indexes = np.argsort(start_logits)[-1 : -n_best_size - 1 : -1].tolist()
+end_indexes = np.argsort(end_logits)[-1 : -n_best_size - 1 : -1].tolist()
+
+valid_answers = []
+
+# 遍历起始位置和结束位置的索引组合
+for start_index in start_indexes:
+    for end_index in end_indexes:
+        if start_index <= end_index:  # 需要进一步测试以检查答案是否在上下文中
+            valid_answers.append(
+                {
+                    "score": start_logits[start_index] + end_logits[end_index],
+                    "text": ""  # 我们需要找到一种方法来获取与上下文中答案对应的原始子字符串
+                }
+            )
+
+```
+
+
+```python
+validation_features = datasets["validation"].map(
+    prepare_validation_features,
+    batched=True,
+    remove_columns=datasets["validation"].column_names
+)
+```
+
+
+```python
+raw_predictions = trained_trainer.predict(validation_features)
+```
+
+
+
+
+
+
+```python
+validation_features.set_format(type=validation_features.format["type"], columns=list(validation_features.features.keys()))
+```
+
+
+```python
+max_answer_length = 30
+```
+
+
+```python
+start_logits = output.start_logits[0].cpu().numpy()
+end_logits = output.end_logits[0].cpu().numpy()
+offset_mapping = validation_features[0]["offset_mapping"]
+
+# 第一个特征来自第一个示例。对于更一般的情况，我们需要将example_id匹配到一个示例索引
+context = datasets["validation"][0]["context"]
+
+# 收集最佳开始/结束逻辑的索引：
+start_indexes = np.argsort(start_logits)[-1 : -n_best_size - 1 : -1].tolist()
+end_indexes = np.argsort(end_logits)[-1 : -n_best_size - 1 : -1].tolist()
+valid_answers = []
+for start_index in start_indexes:
+    for end_index in end_indexes:
+        # 不考虑超出范围的答案，原因是索引超出范围或对应于输入ID的部分不在上下文中。
+        if (
+            start_index >= len(offset_mapping)
+            or end_index >= len(offset_mapping)
+            or offset_mapping[start_index] is None
+            or offset_mapping[end_index] is None
+        ):
+            continue
+        # 不考虑长度小于0或大于max_answer_length的答案。
+        if end_index < start_index or end_index - start_index + 1 > max_answer_length:
+            continue
+        if start_index <= end_index: # 我们需要细化这个测试，以检查答案是否在上下文中
+            start_char = offset_mapping[start_index][0]
+            end_char = offset_mapping[end_index][1]
+            valid_answers.append(
+                {
+                    "score": start_logits[start_index] + end_logits[end_index],
+                    "text": context[start_char: end_char]
+                }
+            )
+
+valid_answers = sorted(valid_answers, key=lambda x: x["score"], reverse=True)[:n_best_size]
+valid_answers
+
+```
+
+
+
+
+    [{'score': 18.515625, 'text': 'Denver Broncos'},
+     {'score': 15.769531,
+      'text': 'Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers'},
+     {'score': 14.910156, 'text': 'Broncos'},
+     {'score': 13.9296875, 'text': 'Carolina Panthers'},
+     {'score': 13.019531,
+      'text': 'The American Football Conference (AFC) champion Denver Broncos'},
+     {'score': 12.859375,
+      'text': 'American Football Conference (AFC) champion Denver Broncos'},
+     {'score': 12.537109, 'text': 'Denver'},
+     {'score': 12.1640625,
+      'text': 'Broncos defeated the National Football Conference (NFC) champion Carolina Panthers'},
+     {'score': 10.9296875,
+      'text': 'Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title.'},
+     {'score': 10.2734375,
+      'text': 'The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers'},
+     {'score': 10.113281,
+      'text': 'American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers'},
+     {'score': 9.332031,
+      'text': 'Denver Broncos defeated the National Football Conference (NFC) champion Carolina'},
+     {'score': 9.089844,
+      'text': 'Carolina Panthers 24–10 to earn their third Super Bowl title.'},
+     {'score': 8.664551, 'text': 'AFC) champion Denver Broncos'},
+     {'score': 8.66333,
+      'text': 'Denver Broncos defeated the National Football Conference'},
+     {'score': 8.26416,
+      'text': 'Denver Broncos defeated the National Football Conference (NFC)'},
+     {'score': 7.742676, 'text': 'Panthers'},
+     {'score': 7.600586,
+      'text': 'Denver Broncos defeated the National Football Conference (NFC'},
+     {'score': 7.4921875, 'text': 'Carolina'},
+     {'score': 7.3242188,
+      'text': 'Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title.'}]
+
+
+
+
+```python
+datasets["validation"][0]["answers"]
+```
+
+
+
+
+    {'text': ['Denver Broncos', 'Denver Broncos', 'Denver Broncos'],
+     'answer_start': [177, 177, 177]}
+
+
+
+
+```python
+import collections
+
+examples = datasets["validation"]
+features = validation_features
+
+example_id_to_index = {k: i for i, k in enumerate(examples["id"])}
+features_per_example = collections.defaultdict(list)
+for i, feature in enumerate(features):
+    features_per_example[example_id_to_index[feature["example_id"]]].append(i)
+```
+
+
+```python
+final_predictions = postprocess_qa_predictions(datasets["validation"], validation_features, raw_predictions.predictions)
+```
+
+    正在后处理 10570 个示例的预测，这些预测分散在 10784 个特征中。
+
+
+
+      0%|          | 0/10570 [00:00<?, ?it/s]
+
+
+
+```python
+from datasets import load_metric
+
+metric = load_metric("squad_v2" if squad_v2 else "squad", trust_remote_code=True)
+```
+
+
+```python
+if squad_v2:
+    formatted_predictions = [{"id": k, "prediction_text": v, "no_answer_probability": 0.0} for k, v in final_predictions.items()]
+else:
+    formatted_predictions = [{"id": k, "prediction_text": v} for k, v in final_predictions.items()]
+references = [{"id": ex["id"], "answers": ex["answers"]} for ex in datasets["validation"]]
+metric.compute(predictions=formatted_predictions, references=references)
+```
+
+
+
+
+    {'exact_match': 74.91958372753075, 'f1': 83.83155050300782}
+
 
 
 
